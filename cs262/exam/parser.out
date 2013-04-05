@@ -1,0 +1,194 @@
+Created by PLY version 3.4 (http://www.dabeaz.com/ply)
+
+Grammar
+
+Rule 0     S' -> re
+Rule 1     re -> LETTER
+Rule 2     re -> re re
+Rule 3     re -> re OR re
+Rule 4     re -> LPAREN re RPAREN
+Rule 5     re -> re ZEROMORE
+
+Terminals, with rules where they appear
+
+LETTER               : 1
+LPAREN               : 4
+OR                   : 3
+RPAREN               : 4
+ZEROMORE             : 5
+error                : 
+
+Nonterminals, with rules where they appear
+
+re                   : 2 2 3 3 4 5 0
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . re
+    (1) re -> . LETTER
+    (2) re -> . re re
+    (3) re -> . re OR re
+    (4) re -> . LPAREN re RPAREN
+    (5) re -> . re ZEROMORE
+
+    LETTER          shift and go to state 1
+    LPAREN          shift and go to state 3
+
+    re                             shift and go to state 2
+
+state 1
+
+    (1) re -> LETTER .
+
+    OR              reduce using rule 1 (re -> LETTER .)
+    ZEROMORE        reduce using rule 1 (re -> LETTER .)
+    LETTER          reduce using rule 1 (re -> LETTER .)
+    LPAREN          reduce using rule 1 (re -> LETTER .)
+    $end            reduce using rule 1 (re -> LETTER .)
+    RPAREN          reduce using rule 1 (re -> LETTER .)
+
+
+state 2
+
+    (0) S' -> re .
+    (2) re -> re . re
+    (3) re -> re . OR re
+    (5) re -> re . ZEROMORE
+    (1) re -> . LETTER
+    (2) re -> . re re
+    (3) re -> . re OR re
+    (4) re -> . LPAREN re RPAREN
+    (5) re -> . re ZEROMORE
+
+    OR              shift and go to state 6
+    ZEROMORE        shift and go to state 4
+    LETTER          shift and go to state 1
+    LPAREN          shift and go to state 3
+
+    re                             shift and go to state 5
+
+state 3
+
+    (4) re -> LPAREN . re RPAREN
+    (1) re -> . LETTER
+    (2) re -> . re re
+    (3) re -> . re OR re
+    (4) re -> . LPAREN re RPAREN
+    (5) re -> . re ZEROMORE
+
+    LETTER          shift and go to state 1
+    LPAREN          shift and go to state 3
+
+    re                             shift and go to state 7
+
+state 4
+
+    (5) re -> re ZEROMORE .
+
+    OR              reduce using rule 5 (re -> re ZEROMORE .)
+    ZEROMORE        reduce using rule 5 (re -> re ZEROMORE .)
+    LETTER          reduce using rule 5 (re -> re ZEROMORE .)
+    LPAREN          reduce using rule 5 (re -> re ZEROMORE .)
+    $end            reduce using rule 5 (re -> re ZEROMORE .)
+    RPAREN          reduce using rule 5 (re -> re ZEROMORE .)
+
+
+state 5
+
+    (2) re -> re re .
+    (2) re -> re . re
+    (3) re -> re . OR re
+    (5) re -> re . ZEROMORE
+    (1) re -> . LETTER
+    (2) re -> . re re
+    (3) re -> . re OR re
+    (4) re -> . LPAREN re RPAREN
+    (5) re -> . re ZEROMORE
+
+    OR              reduce using rule 2 (re -> re re .)
+    LETTER          reduce using rule 2 (re -> re re .)
+    LPAREN          reduce using rule 2 (re -> re re .)
+    $end            reduce using rule 2 (re -> re re .)
+    RPAREN          reduce using rule 2 (re -> re re .)
+    ZEROMORE        shift and go to state 4
+
+  ! ZEROMORE        [ reduce using rule 2 (re -> re re .) ]
+  ! OR              [ shift and go to state 6 ]
+  ! LETTER          [ shift and go to state 1 ]
+  ! LPAREN          [ shift and go to state 3 ]
+
+    re                             shift and go to state 5
+
+state 6
+
+    (3) re -> re OR . re
+    (1) re -> . LETTER
+    (2) re -> . re re
+    (3) re -> . re OR re
+    (4) re -> . LPAREN re RPAREN
+    (5) re -> . re ZEROMORE
+
+    LETTER          shift and go to state 1
+    LPAREN          shift and go to state 3
+
+    re                             shift and go to state 8
+
+state 7
+
+    (4) re -> LPAREN re . RPAREN
+    (2) re -> re . re
+    (3) re -> re . OR re
+    (5) re -> re . ZEROMORE
+    (1) re -> . LETTER
+    (2) re -> . re re
+    (3) re -> . re OR re
+    (4) re -> . LPAREN re RPAREN
+    (5) re -> . re ZEROMORE
+
+    RPAREN          shift and go to state 9
+    OR              shift and go to state 6
+    ZEROMORE        shift and go to state 4
+    LETTER          shift and go to state 1
+    LPAREN          shift and go to state 3
+
+    re                             shift and go to state 5
+
+state 8
+
+    (3) re -> re OR re .
+    (2) re -> re . re
+    (3) re -> re . OR re
+    (5) re -> re . ZEROMORE
+    (1) re -> . LETTER
+    (2) re -> . re re
+    (3) re -> . re OR re
+    (4) re -> . LPAREN re RPAREN
+    (5) re -> . re ZEROMORE
+
+    OR              reduce using rule 3 (re -> re OR re .)
+    LETTER          reduce using rule 3 (re -> re OR re .)
+    LPAREN          reduce using rule 3 (re -> re OR re .)
+    $end            reduce using rule 3 (re -> re OR re .)
+    RPAREN          reduce using rule 3 (re -> re OR re .)
+    ZEROMORE        shift and go to state 4
+
+  ! ZEROMORE        [ reduce using rule 3 (re -> re OR re .) ]
+  ! OR              [ shift and go to state 6 ]
+  ! LETTER          [ shift and go to state 1 ]
+  ! LPAREN          [ shift and go to state 3 ]
+
+    re                             shift and go to state 5
+
+state 9
+
+    (4) re -> LPAREN re RPAREN .
+
+    OR              reduce using rule 4 (re -> LPAREN re RPAREN .)
+    ZEROMORE        reduce using rule 4 (re -> LPAREN re RPAREN .)
+    LETTER          reduce using rule 4 (re -> LPAREN re RPAREN .)
+    LPAREN          reduce using rule 4 (re -> LPAREN re RPAREN .)
+    $end            reduce using rule 4 (re -> LPAREN re RPAREN .)
+    RPAREN          reduce using rule 4 (re -> LPAREN re RPAREN .)
+
