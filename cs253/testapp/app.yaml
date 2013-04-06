@@ -10,7 +10,7 @@ handlers:
   upload: favicon\.ico
 
 - url: .*
-  script: unit2_hw1.app
+  script: unit2_hw2.app
 
 libraries:
 - name: webapp2
