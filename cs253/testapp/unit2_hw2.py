@@ -1,104 +1,108 @@
-#!/usr/bin/env python
-#
-# Copyright 2007 Google Inc.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
+import os
 import webapp2
+import jinja2
 
-form="""
-<form method="post">
-    What is your birthday?
-    <br>
-    <label>Day <input   value="%(day)s"   type="text" name="day"></label>
-    <label>Month <input value="%(month)s" type="text" name="month"></label>
-    <label>Year <input  value="%(year)s"  type="text" name="year"></label>
-    <div style="color:    red">%(error)s</div>
-    <br>
-    <br>
-    <input type="submit">
-</form>
-"""
+template_dir = os.path.join(os.path.dirname(__file__), 'templates')
+jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir),
+                               autoescape = True)
 
-def valid_month(month):
-    months = ['January',
-          'February',
-          'March',
-          'April',
-          'May',
-          'June',
-          'July',
-          'August',
-          'September',
-          'October',
-          'November',
-          'December']
+def render_str(template, **params):
+  t = jinja_env.get_template(template)
+  return t.render(params)
 
-    if month.capitalize() in months:
-        return month.capitalize()
-    else:
-        return None
+class BaseHandler(webapp2.RequestHandler):
+  def render(self, template, **kw):
+    self.response.out.write(render_str(template, **kw))
 
-def valid_day(day):
-    days = [str(x) for x in range(1,32)]
-    if day in days:
-        return int(day)
-    else:
-        return None
+  def write(self, *a, **kw):
+    """ Convenience function.
 
-def valid_year(year):
-    if year.isdigit():
-        year_digit = int(year)
-        if 1900 <= year_digit <= 2020:
-            return year_digit
-    return None
+    Inheriting classes need only type self.write(..)
+    """
+    self.response.out.write(*a, **kw)
 
-def escape_html(s):
-    s = s.replace (">", "&gt;")
-    s = s.replace ("<", "&lt;")
-    s = s.replace ('"', "&quot;")
-    s = s.replace ("&", "&amp;")
-    return s
+class Main(BaseHandler):
+  def get(self):
+    self.render('main.html')
 
-class MainHandler(webapp2.RequestHandler):
-    def write_form(self, error="", day="", month="", year=""):
-        self.response.out.write(form % {"error": error,
-                                        "day"  : escape_html(day),
-                                        "month": escape_html(month),
-                                        "year" : escape_html(year)})
+class Rot13(BaseHandler):
+  def get(self):
+    self.render('rot13-form.html')
 
+  def post(self):
+    rot13 = ''
+    text = self.request.get('text')
+    if text:
+      rot13 = text.encode('rot_13')
+
+    self.render('rot13-form.html', text = rot13)
+
+import re
+USER_RE = re.compile(r"^[a-zA-Z0-9_-]{3,20}$")
+def valid_username(username):
+    return USER_RE.match(username)
+
+PASSWORD_RE = re.compile(r"^.{3,20}$")
+def valid_password(password):
+    return PASSWORD_RE.match(password)
+
+EMAIL_RE = re.compile(r"^[\S]+@[\S]+\.[\S]+$")
+def valid_email(email):
+    return EMAIL_RE.match(email)
+
+class Signup(BaseHandler):
     def get(self):
-        self.write_form()
+        self.render('signup.html')
 
     def post(self):
-        user_month = self.request.get('month')
-        user_day   = self.request.get('day')
-        user_year  = self.request.get('year')
+        user_username = self.request.get('username')
+        user_password = self.request.get('password')
+        user_verify   = self.request.get('verify')
+        user_email    = self.request.get('email')
 
-        day   = valid_day(user_day)
-        month = valid_month(user_month)
-        year  = valid_year(user_year)
+        username = valid_username(user_username)
+        password = valid_password(user_password)
+        verify = None
+        if password and user_verify == user_password:
+            verify = password
+        email = None
+        if user_email != "":
+            email    = valid_email(user_email)
 
-        if not (day and month and year):
-            self.write_form("That doesn't look valid to me, friend.", user_day,
-                    user_month, user_year)
+        username_error = password_error = verify_error = email_error = ""
+        is_error = False
+        if not username:
+            is_error = True
+            username_error = "That's not a valid username."
+        if not password:
+            is_error = True
+            password_error = "That wasn't a valid password."
+        elif not verify:
+            is_error = True
+            verify_error = "Your passwords didn't match."
+        if user_email != "" and not email:
+            is_error = True
+            email_error = "That's not a valid email."
+
+        if not is_error:
+            self.redirect('/welcome?username=' + user_username)
         else:
-            self.redirect("/thanks")
-
-class ThanksHandler(webapp2.RequestHandler):
+            self.render('signup.html', username = user_username,
+                                       email = user_email,
+                                       username_error = username_error,
+                                       password_error = password_error,
+                                       verify_error = verify_error,
+                                       email_error = email_error)
+class Welcome(BaseHandler):
     def get(self):
-        self.response.out.write("Thanks! That's a totally valid day!")
+        username = self.request.get('username')
+        if valid_username(username):
+            self.render('welcome.html', username = username)
+        else:
+            self.redirect('/signup')
 
-
-app = webapp2.WSGIApplication([('/', MainHandler), ('/thanks', ThanksHandler)],
+app = webapp2.WSGIApplication([('/', Main), 
+                               ('/rot13', Rot13), 
+                               ('/signup', Signup),
+                               ('/welcome', Welcome)],
                               debug=True)
