@@ -1,46 +1,41 @@
-import rot13
+import os
 import webapp2
+import jinja2
 
-form="""
-<!DOCTYPE html>
+template_dir = os.path.join(os.path.dirname(__file__), 'templates')
+jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir),
+                               autoescape = True)
 
-<html>
-  <head>
-    <title>Unit 2 Rot 13</title>
-  </head>
+def render_str(template, **params):
+  t = jinja_env.get_template(template)
+  return t.render(params)
 
-  <body>
-    <h2>Enter some text to ROT13:</h2>
-    <form method="post">
-      <textarea name="text"
-                style="height: 100px; width: 400px;">%(rot13)s</textarea>
-      <br>
-      <input type="submit">
-    </form>
-  </body>
+class BaseHandler(webapp2.RequestHandler):
+  def render(self, template, **kw):
+    self.response.out.write(render_str(template, **kw))
 
-</html>
-"""
+  def write(self, *a, **kw):
+    """ Convenience function.
 
-def escape_html(s):
-    s = s.replace (">", "&gt;")
-    s = s.replace ("<", "&lt;")
-    s = s.replace ('"', "&quot;")
-    s = s.replace ("&", "&amp;")
-    return s
+    Inheriting classes need only type self.write(..)
+    """
+    self.response.out.write(*a, **kw)
 
-class MainHandler(webapp2.RequestHandler):
-    def write_form(self, text=""):
-        self.response.out.write(form % {"rot13": escape_html(text)})
+class Main(BaseHandler):
+  def get(self):
+    self.render('main.html')
 
-    def get(self):
-        self.write_form()
+class Rot13(BaseHandler):
+  def get(self):
+    self.render('rot13-form.html')
 
-    def post(self):
-        text = self.request.get('text')
-        rot13_text = rot13.rot13(text)
+  def post(self):
+    rot13 = ''
+    text = self.request.get('text')
+    if text:
+      rot13 = text.encode('rot_13')
 
-        self.write_form(rot13_text)
+    self.render('rot13-form.html', text = rot13)
 
-app = webapp2.WSGIApplication([('/', MainHandler)],
+app = webapp2.WSGIApplication([('/', Main), ('/rot13', Rot13)],
                               debug=True)

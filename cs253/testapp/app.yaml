@@ -10,8 +10,10 @@ handlers:
   upload: favicon\.ico
 
 - url: .*
-  script: unit2_hw2.app
+  script: unit2_hw1.app
 
 libraries:
 - name: webapp2
   version: "2.5.1"
+- name: jinja2
+  version: latest
