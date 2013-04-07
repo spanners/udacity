@@ -1,9 +1,8 @@
 #What is a database?
 ##A program that stores and retrieves large amounts of structured data
 
-(User) ----> (Internet) ----> (Servers) --query--> (Database)
-                                        <--response-- 
- 
+(User) ----> (Internet) ----> (Servers) >--query--> <--response-< (Database)
+                                        
 #Tables
 ##columns and rows
 
