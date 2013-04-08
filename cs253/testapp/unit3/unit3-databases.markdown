@@ -92,3 +92,27 @@ When there's a delay replicating the master DB onto it's slaves, you can sometim
 It's alright if your query is confined to just one shard, but if your query is spread over several the rows may reside in several machines. So you'll have to hit all those machines, merge the results, sort again in memory...
 
 ####Joins become difficult
+
+#ACID
+
+## Atomicity
+
+**All parts of a *transactions* succeed or fail together**
+
+*A transaction: A group of commands -- queries and/or inserts etc. -- that achieve some cohesive effect*
+
+## Consistency
+
+**The database will always be consistent.**
+
+i.e. the database will always move from one valid transaction to the next.
+
+## Isolation
+
+**No transaction can interfere with another's**
+
+One way to do this is with *locking*
+
+## Durability
+
+Once the transaction is committed, it won't be lost
