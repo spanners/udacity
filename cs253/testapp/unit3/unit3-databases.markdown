@@ -115,4 +115,4 @@ One way to do this is with *locking*
 
 ## Durability
 
-Once the transaction is committed, it won't be lost
+**Once the transaction is committed, it won't be lost**
