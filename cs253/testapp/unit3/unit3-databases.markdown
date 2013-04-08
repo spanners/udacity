@@ -69,13 +69,11 @@ This is because you have to update your index (probably)
 
 #Scaling DBs
 
-Done to alleviate queries/inserts on a database when it has too much load.
+Done to alleviate queries/inserts on a database when it has too much load or data
 
 ##Too much load? Replicate the DB
 
-###How & Why it's Done
-
-In most systems you have a lot more reads than you do writes. You can replicate the master DB onto slaves. This is commonly done so that the master can handle the writes and the slaves  can handle the reads (typically more frequent).
+In most systems you have a lot more reads than you do writes. You can replicate the master DB onto slaves. This is commonly done so that the master can handle the writes and the slaves  can handle the reads.
 
 ###Downsides
 
