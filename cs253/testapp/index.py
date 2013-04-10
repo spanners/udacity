@@ -2,24 +2,26 @@ import os
 import webapp2
 import jinja2
 
+from google.appengine.ext import db
+
 template_dir = os.path.join(os.path.dirname(__file__), 'templates')
 jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir),
                                autoescape = True)
 
-def render_str(template, **params):
-  t = jinja_env.get_template(template)
-  return t.render(params)
 
 class BaseHandler(webapp2.RequestHandler):
-  def render(self, template, **kw):
-    self.response.out.write(render_str(template, **kw))
-
+  """ Convenience functions common to many classes. """
   def write(self, *a, **kw):
-    """ Convenience function.
-
-    Inheriting classes need only type self.write(..)
-    """
+    """ Inheriting classes need only type self.write(..). """
     self.response.out.write(*a, **kw)
+
+  def render_str(self, template, **params):
+    t = jinja_env.get_template(template)
+    return t.render(params)
+
+  def render(self, template, **kw):
+    self.write(self.render_str(template, **kw))
+
 
 class Main(BaseHandler):
   def get(self):
@@ -28,6 +30,10 @@ class Main(BaseHandler):
 class Unit2(BaseHandler):
   def get(self):
     self.render('unit2.html')
+
+class Unit3(BaseHandler):
+  def get(self):
+    self.render('unit3.html')
 
 class Rot13(BaseHandler):
   def get(self):
@@ -105,9 +111,29 @@ class Welcome(BaseHandler):
         else:
             self.redirect('/unit2/signup')
 
+class Ascii(BaseHandler):
+
+  def render_front(self, title="", art="", error=""):
+    self.render('ascii.html', title=title, art=art, error=error)
+
+  def get(self):
+    self.render_front()
+
+  def post(self):
+    title = self.request.get("title")
+    art = self.request.get("art")
+
+    if title and art:
+      self.write("thanks!")
+    else:
+      error = "we need both a title and some artwork!"
+      self.render_front(title, art, error)
+
 app = webapp2.WSGIApplication([('/', Main),
-                               ('/unit2', Unit2), 
+                               ('/unit2', Unit2),
+                               ('/unit3', Unit3),
                                ('/unit2/rot13', Rot13), 
                                ('/unit2/signup', Signup),
-                               ('/unit2/welcome', Welcome)],
+                               ('/unit2/welcome', Welcome),
+                               ('/unit3/ascii', Ascii)],
                               debug=True)
