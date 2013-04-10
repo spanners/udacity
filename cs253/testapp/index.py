@@ -111,10 +111,17 @@ class Welcome(BaseHandler):
         else:
             self.redirect('/unit2/signup')
 
+class Art(db.Model):
+  title = db.StringProperty(required = True)
+  art = db.TextProperty(required = True)
+  created = db.DateTimeProperty(auto_now_add = True)
+  
 class Ascii(BaseHandler):
-
   def render_front(self, title="", art="", error=""):
-    self.render('ascii.html', title=title, art=art, error=error)
+    
+    arts = db.GqlQuery("SELECT * FROM Art ORDER BY created DESC")
+
+    self.render('ascii.html', title=title, art=art, error=error, arts=arts)
 
   def get(self):
     self.render_front()
@@ -124,7 +131,10 @@ class Ascii(BaseHandler):
     art = self.request.get("art")
 
     if title and art:
-      self.write("thanks!")
+      a = Art(title = title, art = art)
+      a.put() # store in the google app engine database
+
+      self.redirect('/unit3/ascii')
     else:
       error = "we need both a title and some artwork!"
       self.render_front(title, art, error)
