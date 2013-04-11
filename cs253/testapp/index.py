@@ -161,7 +161,7 @@ class NewPost(BaseHandler):
       p = Post(subject=subject, content=content)
       p.put()
 
-      self.redirect('/unit3/blog')
+      self.redirect('/unit3/blog/%d' % p.key().id())
     else:
       error = "subject and content, please!"
 
