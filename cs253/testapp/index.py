@@ -139,11 +139,46 @@ class Ascii(BaseHandler):
       error = "we need both a title and some artwork!"
       self.render_front(title, art, error)
 
+class Blog(BaseHandler):
+  def get(self):
+    posts = db.GqlQuery("SELECT * FROM Post ORDER BY date DESC")
+    self.render('blog.html', posts = posts)
+
+class Post(db.Model):
+  subject = db.StringProperty(required = True)
+  content = db.TextProperty(required = True)
+  date = db.DateTimeProperty(auto_now_add = True)
+
+class NewPost(BaseHandler):
+  def get(self):
+    self.render('newpost.html')
+
+  def post(self):
+    subject = self.request.get("subject")
+    content = self.request.get("content")
+    
+    if subject and content:
+      p = Post(subject=subject, content=content)
+      p.put()
+
+      self.redirect('/unit3/blog')
+    else:
+      error = "subject and content, please!"
+
+      self.render('newpost.html', subject=subject, content=content, error=error)
+
+class Posts(BaseHandler):
+  def get(self, posts_id):
+    self.render('post.html',post=Post.get_by_id(int(posts_id), parent=None))
+
 app = webapp2.WSGIApplication([('/', Main),
                                ('/unit2', Unit2),
                                ('/unit3', Unit3),
                                ('/unit2/rot13', Rot13), 
                                ('/unit2/signup', Signup),
                                ('/unit2/welcome', Welcome),
-                               ('/unit3/ascii', Ascii)],
+                               ('/unit3/ascii', Ascii),
+                               ('/unit3/blog', Blog),
+                               ('/unit3/blog/newpost', NewPost),
+                               (r'/unit3/blog/(\d+)', Posts)],
                               debug=True)
