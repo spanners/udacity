@@ -8,6 +8,9 @@ template_dir = os.path.join(os.path.dirname(__file__), 'templates')
 jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir),
                                autoescape = True)
 
+def render_str(template, **params):
+  t = jinja_env.get_template(template)
+  return t.render(params)
 
 class BaseHandler(webapp2.RequestHandler):
   """ Convenience functions common to many classes. """
@@ -15,12 +18,8 @@ class BaseHandler(webapp2.RequestHandler):
     """ Inheriting classes need only type self.write(..). """
     self.response.out.write(*a, **kw)
 
-  def render_str(self, template, **params):
-    t = jinja_env.get_template(template)
-    return t.render(params)
-
   def render(self, template, **kw):
-    self.write(self.render_str(template, **kw))
+    self.write(render_str(template, **kw))
 
 
 class Main(BaseHandler):
@@ -139,15 +138,23 @@ class Ascii(BaseHandler):
       error = "we need both a title and some artwork!"
       self.render_front(title, art, error)
 
+def blog_key(name = "default"):
+  return db.Key.from_path('blogs', name)
+
 class Blog(BaseHandler):
   def get(self):
-    posts = db.GqlQuery("SELECT * FROM Post ORDER BY date DESC")
-    self.render('blog.html', posts = posts)
+    posts = db.GqlQuery("SELECT * FROM Post ORDER BY date DESC LIMIT 10")
+    self.render('front.html', posts = posts)
 
 class Post(db.Model):
   subject = db.StringProperty(required = True)
   content = db.TextProperty(required = True)
-  date = db.DateTimeProperty(auto_now_add = True)
+  created = db.DateTimeProperty(auto_now_add = True)
+  last_modified = db.DateTimeProperty(auto_now_add = True)
+
+  def render(self):
+    self._render_text = self.content_replace('\n', '<br>')
+    return render_str("post.html", post = self)
 
 class NewPost(BaseHandler):
   def get(self):
@@ -158,7 +165,7 @@ class NewPost(BaseHandler):
     content = self.request.get("content")
     
     if subject and content:
-      p = Post(subject=subject, content=content)
+      p = Post(parent= blog_key(), subject=subject, content=content)
       p.put()
 
       self.redirect('/unit3/blog/%d' % p.key().id())
@@ -167,9 +174,15 @@ class NewPost(BaseHandler):
 
       self.render('newpost.html', subject=subject, content=content, error=error)
 
-class Posts(BaseHandler):
-  def get(self, posts_id):
-    self.render('post.html',post=Post.get_by_id(int(posts_id), parent=None))
+class PostPage(BaseHandler):
+  def get(self, post_id):
+    key = db.Key.from_path('Post', int(post_id), parent=blog_key())
+    post = db.get(key)
+
+    if not post:
+      self.error(404)
+      return
+    self.render('permalink.html', post = post)
 
 app = webapp2.WSGIApplication([('/', Main),
                                ('/unit2', Unit2),
@@ -180,5 +193,5 @@ app = webapp2.WSGIApplication([('/', Main),
                                ('/unit3/ascii', Ascii),
                                ('/unit3/blog', Blog),
                                ('/unit3/blog/newpost', NewPost),
-                               (r'/unit3/blog/(\d+)', Posts)],
+                               (r'/unit3/blog/(\d+)', PostPage)],
                               debug=True)
