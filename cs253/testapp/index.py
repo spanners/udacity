@@ -153,8 +153,8 @@ class Post(db.Model):
   last_modified = db.DateTimeProperty(auto_now_add = True)
 
   def render(self):
-    self._render_text = self.content_replace('\n', '<br>')
-    return render_str("post.html", post = self)
+    self._render_text = self.content.replace('\n', '<br>')
+    return render_str("post.html", p = self)
 
 class NewPost(BaseHandler):
   def get(self):
@@ -177,12 +177,12 @@ class NewPost(BaseHandler):
 class PostPage(BaseHandler):
   def get(self, post_id):
     key = db.Key.from_path('Post', int(post_id), parent=blog_key())
-    post = db.get(key)
+    p = db.get(key)
 
-    if not post:
+    if not p:
       self.error(404)
       return
-    self.render('permalink.html', post = post)
+    self.render('permalink.html', p = p)
 
 app = webapp2.WSGIApplication([('/', Main),
                                ('/unit2', Unit2),
@@ -191,7 +191,7 @@ app = webapp2.WSGIApplication([('/', Main),
                                ('/unit2/signup', Signup),
                                ('/unit2/welcome', Welcome),
                                ('/unit3/ascii', Ascii),
-                               ('/unit3/blog', Blog),
+                               ('/unit3/blog/?', Blog),
                                ('/unit3/blog/newpost', NewPost),
                                (r'/unit3/blog/(\d+)', PostPage)],
                               debug=True)

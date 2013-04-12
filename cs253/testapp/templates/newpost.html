@@ -1,17 +1,21 @@
-<html>
-<body>
-	<head><title>SwashBlog - New Post</title></head>
-	<form method="post">
-		<label><div>subject</div><input type="text" name="subject" value="{{subject}}"></label>
+{% extends "base.html" %}
 
-			<label>
-				<div>content</div>
-				<textarea name="content">{{content}}</textarea>
-			</label>
+{% block content %}
+  <h2>new post</h2>
 
-			<div class="error">{{error}}</div>
+    <form method="post">
+      <label>
+        <div>subject</div>
+        <input type="text" name="subject" value="{{subject}}">
+      </label>
 
-			<input type="submit">
-		</form>
-	</body>
-	</html>
+      <label>
+        <div>blog</div>
+        <textarea name="content">{{content}}</textarea>
+      </label>
+
+      <div class="error">{{error}}</div>
+
+      <input type="submit">
+    </form>
+{% endblock %}
