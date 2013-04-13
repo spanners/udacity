@@ -76,3 +76,24 @@ or
 
 Chrome private browsing mode, open debug tools, visit domain, View Headers!
 
+### Testing cookies using Cheating!
+
+You can 'cheat' by editing your cookie in the browser to test some feature
+
+### Hashing
+
+		import hashlib
+
+		x = hashlib.md5("foo!")
+
+		x.hexdigest() # get the hash of x
+
+#### Hashing cookies
+
+		Set-Cookie: visits=5,[hash]
+
+When server requests this cookie again from the browser, we check to see if the rehashed value matches the hash. If it doesn't we know it's been tampered with and we can throw it out.
+
+We do this because the user can cheat too, and fake data.
+So we can hash(SECRET + data) and check if this matches the [hash]. SECRET is a server-side string that we.. keep secret.
+
