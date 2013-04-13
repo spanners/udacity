@@ -39,5 +39,40 @@ or
 * HTTP Request
 	* Sent by the browser
 	* Name = value pair, separate cookies separated by semicolon e.g.
-	** cookie: user_id = 12345; last-seen = Dec 22 1983
-	* Don't put semicolons in the cookie!
+	** Cookie: user_id = 12345; last-seen = Dec 22 1983
+	* **Don't put semicolons in the cookie!**
+
+### A more thorough example of a cookie
+
+		Set-Cookie: USER_ID=12345; expires=Sat, 19-Apr-2014 23:50:21 GMT; path=/; domain=.udacity.com
+
+* expires -- when the cookie will no longer be sent.
+* path -- this cookie is relevant to this path (you can restrict cookies to specific paths)
+* domain -- specific to sites that end in this domain. Anybody on this domain will receive this cookie.
+
+** NB: the minimum domain you can restrict a cookie to is .reddit.com (if you make it just reddit.com, the '.' automatically gets added)
+
+** NB: You can only set a cookie for that domain or HIGHER, i.e. if I'm at www.reddit.com, I can only set for this or .reddit.com, not foo.reddit.com etc.**
+
+### A command to just get the headers from a url
+
+		$ curl -I www.google.com
+
+		HTTP/1.1 302 Found
+		Location: http://www.google.co.uk/
+		Cache-Control: private
+		Content-Type: text/html; charset=UTF-8
+		Set-Cookie: PREF=ID=24c322b9b73e6ebc:FF=0:TM=1365855788:LM=1365855788:S=S41rLCUF8rtOoXg0; expires=Mon, 13-Apr-2015 12:23:08 GMT; path=/; domain=.google.com
+		Set-Cookie: NID=67=RMcgCsuqXiSTJZcVK5Z3fFQjJYvC3lrVPivVSIT45RkLGsC-n_DdDi355pRf94XuW1lNhlumuwTY4Zq5vTpXO44zv0CWg1fBrOF6z_ml3CHNbd7ps9ZliSQL6oKfGS5O; expires=Sun, 13-Oct-2013 12:23:08 GMT; path=/; domain=.google.com; HttpOnly
+		P3P: CP="This is not a P3P policy! See http://www.google.com/support/accounts/bin/answer.py?hl=en&answer=151657 for more info."
+		Date: Sat, 13 Apr 2013 12:23:08 GMT
+		Server: gws
+		Content-Length: 221
+		X-XSS-Protection: 1; mode=block
+		X-Frame-Options: SAMEORIGIN
+
+
+### Another way
+
+Chrome private browsing mode, open debug tools, visit domain, View Headers!
+
