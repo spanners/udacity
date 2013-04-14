@@ -104,3 +104,5 @@ We do this because the user can cheat too, and fake data.
 So we can hash(SECRET + data) and check if this matches the [hash]. SECRET is a server-side string that we.. keep secret.
 
 ### But use bcrypt for passwords. Really.
+
+bcrypt allows you to add a parameter to the hashing function to delay the execution of the function by *n* seconds. This is useful because computers continue to get faster, but we don't want them to be able to bruteforce the hashing algorithm to figure out a mapping from every input string to it's respective hash (i.e. make a rainbow table).

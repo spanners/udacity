@@ -5,10 +5,17 @@
 
 	<style type="text/css">
 		body {
+			position: relative;
 			font-family: sans-serif;
 			width: 800px;
 			margin: 0 auto;
 			padding: 10px;
+		}
+
+		.map {
+			position: absolute;
+			right: 0px;
+			top: 95px;
 		}
 
 		.error {
@@ -74,6 +81,10 @@
 
 			<input type="submit">
 		</form>
+
+		{% if img_url %}
+			<img class="map" src="{{img_url}}">
+		{% endif %}
 
 		<hr>
 

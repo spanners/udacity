@@ -114,4 +114,5 @@ Similar concept to SOAP. Compares to JSON
 ## Thift (facebook)
 Again, compares to JSON
 
-# Just use JSON/XML Come on. They're common.
+# But just use JSON/XML
+Come on. They're common. It makes everyone's lives easier.
