@@ -82,7 +82,7 @@ Make sure to escape quotes in json with a \ so that it doesn't mess up our pytho
 		>> json.dumps([1,2,3])
 		'[1, 2, 3]'
 
-**CAVEAT:** The python version of escaped dumped json uses \\", but the valid json uses \"
+**CAVEAT:** The python version of escaped dumped json uses \\\\", but the valid json uses \"
 
 # How to be a good citizen on the Internet
 
