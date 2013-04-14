@@ -80,7 +80,7 @@ Chrome private browsing mode, open debug tools, visit domain, View Headers!
 
 You can 'cheat' by editing your cookie in the browser to test some feature
 
-### Hashing
+## Hashing
 
 		import hashlib
 
@@ -88,7 +88,13 @@ You can 'cheat' by editing your cookie in the browser to test some feature
 
 		x.hexdigest() # get the hash of x
 
-#### Hashing cookies
+		# you should use HMAC instead though
+		# HMAC is Hash-based Message Authentication Code:
+
+		import hmac
+		print hmac.new("secret", "udacity").hexdigest()
+
+### Hashing cookies
 
 		Set-Cookie: visits=5,[hash]
 
@@ -97,3 +103,4 @@ When server requests this cookie again from the browser, we check to see if the 
 We do this because the user can cheat too, and fake data.
 So we can hash(SECRET + data) and check if this matches the [hash]. SECRET is a server-side string that we.. keep secret.
 
+### But use bcrypt for passwords. Really.
