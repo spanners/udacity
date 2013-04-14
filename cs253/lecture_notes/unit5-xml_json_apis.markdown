@@ -11,14 +11,13 @@ We might want our server to make requests to other servers for data, in order to
 		>> contents = page.read()
 		>> headers = page.headers.items()
 		>> print page.headers['content-type']
-
 		'text/html; charset=ISO-8859-1'
 
 		# take a look at dir(page)
 
 # Why not talk to servers with HTML?
 
-Browsers are very permissive with HTML. It doesn't have to adhere to strict standards in order for browsers to render it, and it is thus somemtimes unstructured/error-prone.
+Browsers are very permissive with HTML. It doesn't have to adhere to strict standards in order for browsers to render it, and it is thus sometimes unstructured/error-prone.
 
 This makes parsing HTML for collation/maniupulation of data very tricky.
 
@@ -41,7 +40,6 @@ The internal representation of an XML/HTML Document in the form of a tree.
 		>> print dom.toprettyxml() # (pretty prints structure of xml tree)
 
 		>> print dom.getElementsByTagName("item")[0].childNodes[0].nodeValue
-
 		1
 
 		# look at dir(dom)
