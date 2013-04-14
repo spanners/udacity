@@ -286,10 +286,31 @@ class Welcome(BlogHandler):
         else:
             self.redirect('/unit2/signup')
 
+import urllib2
+from xml.dom import minidom
+
+IP_URL = "http://api.hostip.info/?ip="
+def get_coords(ip):
+    url = IP_URL + ip
+    content = None
+    try:
+        content = urllib2.urlopen(url).read()
+    except UnicodeTranslateError:
+        return
+    
+    if content:
+        # parse the xml and find the coordinates
+        dom = minidom.parseString(content)
+        coords = dom.getElementsByTagName("gml:coordinates")
+        if coords and coords[0].childNodes[0].nodeValue:
+            lon, lat = coords[0].childNodes[0].nodeValue.split(',')
+            return db.GeoPt(lat, lon)
+
 class Art(db.Model):
   title = db.StringProperty(required = True)
   art = db.TextProperty(required = True)
   created = db.DateTimeProperty(auto_now_add = True)
+  coords = db.GeoPtProperty()
   
 class Ascii(BlogHandler):
   def render_front(self, title="", art="", error=""):
@@ -307,7 +328,12 @@ class Ascii(BlogHandler):
 
     if title and art:
       a = Art(title = title, art = art)
-      a.put() # store in the google app engine database
+
+      coords = get_coords(self.request.remote_addr)
+      if coords:
+        a.coords = coords
+
+      a.put()
 
       self.redirect('/unit5/ascii')
     else:
