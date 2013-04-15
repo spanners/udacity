@@ -162,9 +162,34 @@ your cache with stuff.
 
 
 ## CSRF -- Cross-site request forgery
+Your trusted site asciichan.com has a form action like so:
 
-        <from action="http://badguy.com">
+        <form action="/submit">
 
-Badguy could build a webpage on his own domain,
-use CSS to hide this form, and use JavaScript to automatically
-submit this form on document load
+Badguy could build a webpage on his own domain, use CSS to hide a form, and
+use JavaScript to automatically submit this form on document load like so:
+
+        <form action="http://asciichan.com/submit">
+
+Then you visit badguy's invisible form, your browser will render this form, he'll submit
+it for you sneakily, and this will submit to asciichan.com using your cookies on
+asciichan.com -- your authorised identity.
+
+Your site Asciichan won't see anything wrong with this -- it will receive a
+submission from your IP, using your authorised cookies, but Badguy has just used
+this verified identity to perform an action on your behalf.
+
+From Wikipedia https://en.wikipedia.org/wiki/Cross-site_request_forgery :
+
+The following characteristics are common to CSRF:
+
+* Involve sites that rely on a user's identity
+* Exploit the site's trust in that identity
+* Trick the user's browser into sending HTTP requests to a target site
+* Involve HTTP requests that have side effects
+
+A way to prevent this:
+
+Requiring a secret, user-specific token in all form submissions and side-effect
+URLs prevents CSRF; the attacker's site cannot put the right token in its
+submissions
