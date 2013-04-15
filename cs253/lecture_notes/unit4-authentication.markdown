@@ -37,7 +37,7 @@ or
 	* Value up to 4kb
 * HTTP Request
 	* Sent by the browser
-	* Name = value pair, separate cookies separated by semicolon e.g. Cookie: user_id = 12345; last-seen = Dec 22 1983`
+	* Name = value pair, separate cookies separated by semicolon e.g. `Cookie: user_id = 12345; last-seen = Dec 22 1983`
 	* **Don't put semicolons in the cookie!**
 
 ### A more thorough example of a cookie
