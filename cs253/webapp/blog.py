@@ -359,7 +359,7 @@ import gql2json
 
 class PostPageJson(BlogHandler):
     def get(self, post_id):
-        self.response.headers['Content-Type'] = 'application/json; charset=UTF-8'
+        self.response.headers['Content-Type'] = 'application/json; charset=UTF-8'
         key = db.Key.from_path('Post', int(post_id), parent=blog_key())
         post = db.get(key)
 

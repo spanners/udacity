@@ -7,34 +7,34 @@
 #     http://www.apache.org/licenses/LICENSE-2.0
 # 
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
+# distributed under the License is distributed on an "AS IS" BASIS,http://localhost:9080/blog
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Utility classes and methods for use with simplejson and appengine.
+"""Utility classes and methods for use with json and appengine.
 
-Provides both a specialized simplejson encoder, GqlEncoder, designed to simplify
+Provides both a specialized json encoder, GqlEncoder, designed to simplify
 encoding directly from GQL results to JSON. A helper function, encode, is also
 provided to further simplify usage.
 
-  GqlEncoder: Adds support for GQL results and properties to simplejson.
+  GqlEncoder: Adds support for GQL results and properties to json.
   encode(input): Direct method to encode GQL objects as JSON.
 """
 
 import datetime
-import simplejson
+import json
 import time
 
 from google.appengine.api import users
 from google.appengine.ext import db
 
 
-class GqlEncoder(simplejson.JSONEncoder):
+class GqlEncoder(json.JSONEncoder):
   
   """Extends JSONEncoder to add support for GQL results and properties.
   
-  Adds support to simplejson JSONEncoders for GQL results and properties by
+  Adds support to json JSONEncoders for GQL results and properties by
   overriding JSONEncoder's default method.
   """
   
@@ -80,7 +80,7 @@ class GqlEncoder(simplejson.JSONEncoder):
         output[method] = getattr(obj, method)()
       return output
 
-    return simplejson.JSONEncoder.default(self, obj)
+    return json.JSONEncoder.default(self, obj)
 
 
 def encode(input):
