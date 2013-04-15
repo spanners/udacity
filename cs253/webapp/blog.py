@@ -355,12 +355,29 @@ class Ascii(BlogHandler):
       error = "we need both a title and some artwork!"
       self.render_front(title, art, error)
 
+import gql2json
+
+class PostPageJson(BlogHandler):
+    def get(self, post_id):
+        self.response.headers['Content-Type'] = 'application/json; charset=UTF-8'
+        key = db.Key.from_path('Post', int(post_id), parent=blog_key())
+        post = db.get(key)
+
+        if not post:
+            self.error(404)
+            return
+
+        self.write(gql2json.encode(post))
+
+
 app = webapp2.WSGIApplication([('/', MainPage),
                                ('/unit2/rot13', Rot13),
                                ('/unit2/signup', Unit2Signup),
                                ('/unit2/welcome', Welcome),
                                ('/blog/?', BlogFront),
+                               #('/blog.json', BlogJson),
                                ('/blog/([0-9]+)', PostPage),
+                               ('/blog/([0-9]+).json', PostPageJson),
                                ('/blog/newpost', NewPost),
                                ('/signup', Register),
                                ('/login', Login),
