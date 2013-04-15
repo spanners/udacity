@@ -4,12 +4,15 @@ import random
 import hashlib
 import hmac
 import json
+import logging
 from string import letters
 
 import webapp2
 import jinja2
 
 from google.appengine.ext import db
+
+DEBUG = True
 
 template_dir = os.path.join(os.path.dirname(__file__), 'templates')
 jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir),
@@ -382,7 +385,7 @@ class Ascii(BlogHandler):
 
 
 app = webapp2.WSGIApplication([('/', MainPage),
-                               ('/unit2/rot13', Rot13),
+                               ('/unit2/rot13/?', Rot13),
                                ('/unit2/signup', Unit2Signup),
                                ('/unit2/welcome', Welcome),
                                ('/blog/?(?:.json)?', BlogFront),
@@ -392,6 +395,6 @@ app = webapp2.WSGIApplication([('/', MainPage),
                                ('/login', Login),
                                ('/logout', Logout),
                                ('/unit3/welcome', Unit3Welcome),
-                               ('/unit5/ascii', Ascii)
+                               ('/unit5/ascii/?', Ascii)
                                ],
                               debug=True)
