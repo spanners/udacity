@@ -143,7 +143,7 @@ This is fine if id is a number, but what if it's the string
 
         ';--DROP TABLE;
 
-So %s allows the user to inject arbitrary SQL into the database.
+So `%s` allows the user to inject arbitrary SQL into the database.
 
 So you want to make sure you're always providing a wrapper around your SQL.
 Google App Engine does this automatically. You can use **SQLAlchemy** which provides
@@ -162,7 +162,7 @@ your cache with stuff.
 
 
 ## CSRF -- Cross-site request forgery
-Your trusted site asciichan.com has a form action like so:
+Your trusted site **asciichan.com** has a form action like so:
 
         <form action="/submit">
 

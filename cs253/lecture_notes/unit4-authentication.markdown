@@ -33,13 +33,13 @@ or
 * HTTP Response
 	* Sent by the server
 	* Name = value pair, e.g.
-	** Set-Cookie: user_id = 12345
+	** `Set-Cookie: user_id = 12345`
 	* Name is very short
 	* Value up to 4kb
 * HTTP Request
 	* Sent by the browser
 	* Name = value pair, separate cookies separated by semicolon e.g.
-	** Cookie: user_id = 12345; last-seen = Dec 22 1983
+	** `Cookie: user_id = 12345; last-seen = Dec 22 1983`
 	* **Don't put semicolons in the cookie!**
 
 ### A more thorough example of a cookie
@@ -101,7 +101,8 @@ You can 'cheat' by editing your cookie in the browser to test some feature
 When server requests this cookie again from the browser, we check to see if the rehashed value matches the hash. If it doesn't we know it's been tampered with and we can throw it out.
 
 We do this because the user can cheat too, and fake data.
-So we can hash(SECRET + data) and check if this matches the [hash]. SECRET is a server-side string that we.. keep secret.
+So we can `hash(SECRET + data)` and check if this matches `[hash]`. 
+`SECRET` is a server-side string that we.. keep secret.
 
 ### But use bcrypt for passwords. Really.
 
