@@ -114,3 +114,57 @@ Again, compares to JSON
 
 # But just use JSON/XML
 Come on. They're common. It makes everyone's lives easier.
+
+# Security
+A really big concept, but here's some highlevel summaries
+
+## XSS
+
+        <textarea><script type="javascript">
+        send document.cookie() to badguy.com
+        do bad stuff
+        mwhahahaha pwnd
+        </script>
+        </textarea>
+
+1. badguy puts a script (as above) in vulnerable website
+2. you visit page and badguy fetches your cookies in his site badguy.com
+3. badguy can put your cookies in his browser and browse as you!
+
+Shouldn't be a problem if you escape your HTML, or you accept only a safe subset e.g. Markdown
+
+## SQL injection
+
+        db.Gql("SELECT * FROM Link WHERE id = %s") % id
+
+where `id` comes from the URL
+
+This is fine if id is a number, but what if it's the string
+
+        ';--DROP TABLE;
+
+So %s allows the user to inject arbitrary SQL into the database.
+
+So you want to make sure you're always providing a wrapper around your SQL.
+Google App Engine does this automatically. You can use **SQLAlchemy** which provides
+a similar interface. SQLAlchemy also provides ORM (Object Relational Mapping)
+which can convert your python objects into SQL, but this is kinda bad as it
+disconnects you from the queries you're running. Queries are often what cause
+your webapp to be slow, and if you don't have direct control of your queries you
+won't be able to scale quite so consistently.
+
+## memcache injection
+
+If you're taking input from the user and are converting that into a cache key,
+if memcache isn't validating the key, a user could put something in the URL that
+can finish the memcache statement and begin a new one, allowing them to pollute
+your cache with stuff.
+
+
+## CSRF -- Cross-site request forgery
+
+        <from action="http://badguy.com">
+
+Badguy could build a webpage on his own domain,
+use CSS to hide this form, and use JavaScript to automatically
+submit this form on document load
