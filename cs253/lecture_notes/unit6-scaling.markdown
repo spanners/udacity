@@ -138,5 +138,13 @@ Multiple users submit at the same time update cache at same time, overwriting ea
 		# unique is a hash of the value
 		# compare to get(key) -> value
 
-		cas(key, value, unique) -> True if the unique matches the unique in the cache, else
+		cas(key, value, unique) -> True if the unique matches the unique in the cache, else: 
 		                        -> False
+		# compare to set(key, value)
+
+### Example:
+
+t | App1 | App 2
+--- | --- | ---
+1 | v,u = mc.gets(k) | v,u = mc.gets(k)
+2 | mc.cas(k,y,u) -> True | mc.cas(k,y,u) -> False because App1 got there first and u changed
