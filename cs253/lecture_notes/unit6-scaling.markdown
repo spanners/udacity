@@ -147,4 +147,25 @@ Multiple users submit at the same time update cache at same time, overwriting ea
 t | App1 | App 2
 --- | --- | ---
 1 | v,u = mc.gets(k) | v,u = mc.gets(k)
-2 | mc.cas(k,y,u) -> True | mc.cas(k,y,u) -> False because App1 got there first and u changed
+2 | mc.cas(k,y,u) -> True | mc.cas(k,y,u) -> False, because **App1** got there first and u changed
+
+# More pieces
+
+Things to do to cache for more speed.
+
+## DNS round robin
+
+More than one load balancer? OK. But what load balances the load balancers...? DNS round robin
+
+So.. udacity.com might map to many IPs, and so requests at different times of the day, or different countries, or ip ranges.. go to different servers.
+
+## Page caching
+
+We can also cache the entire responses of the page using tools like:
+
+* Varnish
+* Squid
+
+## CDN -- Content delivery network
+
+Third party BIIIG caches which cache entire responses all over the Internet.
