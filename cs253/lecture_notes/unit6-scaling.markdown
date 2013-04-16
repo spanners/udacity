@@ -111,3 +111,32 @@ Features:
 * Fast
 * Not durable
 * Limited by how much memory you have
+* LRU cache -- Throws away data that's **L**east **R**ecently **U**sed
+
+## Stateless
+
+* cache survives restarts
+* app using memcached is now **stateless** (crucial to scaling)
+** no state between restarts
+** apps are now interchangable
+** adding apps is easy
+** apps can be scaled independent of cache and db
+
+So state is stored in either cookies, DB, or memcached but **NOT** the apps! :)
+
+# Advanced cache updates
+
+## Problem
+
+Multiple users submit at the same time update cache at same time, overwriting eachother (known as squashing).
+
+## Solutions
+
+###CAS -- Check and Set
+
+		gets(key) -> value, unique
+		# unique is a hash of the value
+		# compare to get(key) -> value
+
+		cas(key, value, unique) -> True if the unique matches the unique in the cache, else
+		                        -> False
