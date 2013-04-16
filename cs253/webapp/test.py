@@ -1,14 +1,10 @@
 import os
-import sys
 import re
 import random
 import hashlib
 import hmac
-import logging
 import json
-import urllib2
-from xml.dom import minidom
-from datetime import datetime, timedelta
+import logging
 from string import letters
 
 import webapp2
@@ -24,50 +20,6 @@ jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir),
                                autoescape = True)
 
 secret = 'blerpyderpington'
-
-def age_set(key, val):
-    save_time = datetime.utcnow()
-    memcache.set(key, (val, save_time))
-
-def age_get(key):
-    r = memcache.get(key)
-    if r:
-        val, save_time = r
-        age = (datetime.utcnow() - save_time).total_seconds()
-    else:
-        val, age = None, 0
-    return val, age
-
-def add_post(post):
-    post.put()
-    get_posts(update = True)
-    return str(post.key().id())
-
-def get_posts(update = False):    
-    mc_key = 'BLOGS'
-
-    posts, age = age_get(mc_key)
-    if update or posts is None:
-        q = db.GqlQuery("SELECT * "
-                        "FROM Post "
-                        "WHERE ANCESTOR IS :1 "
-                        "ORDER BY created DESC "
-                        "LIMIT 10",
-                        blog_key)
-        posts = list(q)
-        age_set(mc_key, posts)
-
-    return posts, age
-
-def age_str(age):
-    s = 'Queried %s seconds ago'
-    age = int(age)
-    if age == 1:
-        s = s.replace('seconds', 'second')
-    return s % age
-
-def flush_cache():
-    memcache.flush_all()
 
 def render_str(template, **params):
     t = jinja_env.get_template(template)
@@ -123,10 +75,13 @@ class BlogHandler(webapp2.RequestHandler):
         else:
             self.format = 'html'
 
+def render_post(response, post):
+    response.out.write('<b>' + post.subject + '</b><br>')
+    response.out.write(post.content)
 
 class MainPage(BlogHandler):
   def get(self):
-      self.render('main.html')
+      self.write('Hello, Udacity!')
 
 
 ##### user stuff
@@ -176,7 +131,9 @@ class User(db.Model):
 
 
 ##### blog stuff
-blog_key = db.Key.from_path('Blogs', 'blogs')
+
+def blog_key(name = 'default'):
+    return db.Key.from_path('blogs', name)
 
 class Post(db.Model):
     subject = db.StringProperty(required = True)
@@ -198,29 +155,23 @@ class Post(db.Model):
 
 class BlogFront(BlogHandler):
     def get(self):
-        posts, age = get_posts()
+        posts = Post.all().order('-created')
         if self.format == 'html':
-            self.render('front.html', posts = posts, age = age_str(age))
+            self.render('front.html', posts = posts)
         else:
             return self.render_json([p.as_dict() for p in posts])
 
 class PostPage(BlogHandler):
     def get(self, post_id):
-        post_key = 'POST_' + post_id
-
-        post, age = age_get(post_key)
-        if not post:
-            key = db.Key.from_path('Post', int(post_id), parent=blog_key)
-            post = db.get(key)
-            age_set(post_key, post)
-            age = 0
+        key = db.Key.from_path('Post', int(post_id), parent=blog_key())
+        post = db.get(key)
 
         if not post:
             self.error(404)
             return
 
         if self.format == 'html':
-            self.render("permalink.html", post = post, age = age_str(age))
+            self.render("permalink.html", post = post)
         elif self.format == 'json':
             self.render_json(post.as_dict())
 
@@ -229,7 +180,7 @@ class NewPost(BlogHandler):
         if self.user:
             self.render("newpost.html")
         else:
-            self.redirect("/blog/login")
+            self.redirect("/login")
 
     def post(self):
         if not self.user:
@@ -239,9 +190,9 @@ class NewPost(BlogHandler):
         content = self.request.get('content')
 
         if subject and content:
-            p = Post(parent = blog_key, subject = subject, content = content)
-            post_id = add_post(p)
-            self.redirect('/blog/%s' % post_id)
+            p = Post(parent = blog_key(), subject = subject, content = content)
+            p.put()
+            self.redirect('/blog/%s' % str(p.key().id()))
         else:
             error = "subject and content, please!"
             self.render("newpost.html", subject=subject, content=content, error=error)
@@ -326,7 +277,7 @@ class Register(Signup):
             u.put()
 
             self.login(u)
-            self.redirect('/blog/welcome')
+            self.redirect('/blog')
 
 class Login(BlogHandler):
     def get(self):
@@ -339,7 +290,7 @@ class Login(BlogHandler):
         u = User.login(username, password)
         if u:
             self.login(u)
-            self.redirect('/blog/welcome')
+            self.redirect('/blog')
         else:
             msg = 'Invalid login'
             self.render('login-form.html', error = msg)
@@ -347,14 +298,14 @@ class Login(BlogHandler):
 class Logout(BlogHandler):
     def get(self):
         self.logout()
-        self.redirect('/blog/signup')
+        self.redirect('/blog')
 
 class Unit3Welcome(BlogHandler):
     def get(self):
         if self.user:
             self.render('welcome.html', username = self.user.name)
         else:
-            self.redirect('/blog/signup')
+            self.redirect('/signup')
 
 class Welcome(BlogHandler):
     def get(self):
@@ -364,107 +315,101 @@ class Welcome(BlogHandler):
         else:
             self.redirect('/unit2/signup')
 
-class Flush(webapp2.RequestHandler):
-    def get(self):
-        flush_cache()
-        self.redirect('/blog')
-
-art_key = db.Key.from_path('ASCIIChan', 'arts')
-
-def console(s):
-        sys.stderr.write('%s\n' % s)
+import urllib2
+from xml.dom import minidom
 
 IP_URL = "http://api.hostip.info/?ip="
 def get_coords(ip):
-        ip = "4.2.2.2"
-        url = IP_URL + ip
-        content = None
-        try:
-                content = urllib2.urlopen(url).read()
-        except URLError:
-                return
+    url = IP_URL + ip
+    content = None
+    try:
+        content = urllib2.urlopen(url).read()
+    except UnicodeTranslateError:
+        return
 
-        if content:
-                d = minidom.parseString(content)
-                coords = d.getElementsByTagName("gml:coordinates")
-                if coords and coords[0].childNodes[0].nodeValue:
-                        lon, lat = coords[0].childNodes[0].nodeValue.split(',')
-                        return db.GeoPt(lat, lon)
-
-
-GMAPS_URL = "http://maps.googleapis.com/maps/api/staticmap?size=380x263&sensor=false&"
-def gmap_img(points):
-        markers = '&'.join('markers=%s,%s' % (p.lat, p.lon) for p in points)
-        return GMAPS_URL + markers
+    if content:
+        # parse the xml and find the coordinates
+        dom = minidom.parseString(content)
+        coords = dom.getElementsByTagName("gml:coordinates")
+        if coords and coords[0].childNodes[0].nodeValue:
+            lon, lat = coords[0].childNodes[0].nodeValue.split(',')
+            return db.GeoPt(lat, lon)
 
 class Art(db.Model):
-        title = db.StringProperty(required = True)
-        art = db.TextProperty(required = True)
-        created = db.DateTimeProperty(auto_now_add = True)
-        coords = db.GeoPtProperty( )
+  title = db.StringProperty(required = True)
+  art = db.TextProperty(required = True)
+  created = db.DateTimeProperty(auto_now_add = True)
+  coords = db.GeoPtProperty()
 
+GMAPS_URL = "http://maps.googleapis.com/maps/api/staticmap?size=380x263&sensor=false&"
+def gmaps_img(points):
+    markers = '&'.join('markers=%s,%s' % (p.lat, p.lon)
+        for p in points)
+    return GMAPS_URL + markers
+
+CACHE = {}
 def top_arts(update = False):
-        key = 'top'
-        arts = memcache.get(key)
-        if arts is None or update:
-                logging.error("DB QUERY")
-                arts = db.GqlQuery("SELECT * "
-                                        "FROM Art "
-                                        "WHERE ANCESTOR IS :1 "
-                                        "ORDER BY created DESC "
-                                        "LIMIT 10",
-                                        art_key)
-                arts = list(arts)
-                memcache.set(key, arts)
-        return arts
+    key = 'top'
+    arts = memcache.get(key)
+    if arts is None or update:
+        logging.error("DB QUERY")
+        arts = db.GqlQuery("SELECT * " 
+                       "FROM Art "
+                       "ORDER BY created DESC "
+                       "LIMIT 10")
+
+        # prevent the running of multiple queries
+        arts = list(arts) #  caches the query
+        memcache.set(key, arts)
+    return arts
 
 class Ascii(BlogHandler):
-        def render_front(self, title="", art="", error=""):
-                arts = top_arts()
+  def render_front(self, title='', art='', error=''):
 
-                img_url = None
-                points = filter(None, (a.coords for a in arts))
-                if points:
-                        img_url = gmap_img(points)
+    arts = top_arts()
 
-                #display the image URL
-                self.render("ascii.html", title = title, art = art, error = error, arts = arts, img_url = img_url)
+    points = filter(None, (a.coords for a in arts))
+    img_url = None
+    if points:
+        img_url = gmaps_img(points)
 
-        def get(self):
-                self.render_front()
+    self.render('ascii.html', title=title, art=art, error=error, arts=arts, img_url=img_url)
 
-        def post(self):
-                title = self.request.get("title")
-                art = self.request.get("art")
+  def get(self):
+    self.render_front()
 
-                if title and art:
-                        p = Art(parent=art_key, title = title, art = art)
-                        #lookup the user's coordinates from their IP
-                        coords = get_coords(self.request.remote_addr)
-                        #if we have coordinates, add them to the art
-                        if coords:
-                                p.coords = coords
-                        p.put()
-                        #rerun the query and update the cache
-                        top_arts(True)
+  def post(self):
+    title = self.request.get("title")
+    art = self.request.get("art")
 
-                        self.redirect("/ascii")
-                else:
-                        error = "we need both a title and some artwork!"
-                        self.render_front(error = error, title = title, art =art)
+    if title and art:
+      a = Art(title = title, art = art)
+
+      coords = get_coords(self.request.remote_addr)
+      if coords:
+        a.coords = coords
+
+      a.put()
+      # rerun the query and update the cache
+      top_arts(True)
+
+      self.redirect('/unit5/ascii')
+    else:
+      error = "we need both a title and some artwork!"
+      self.render_front(title, art, error)
+
 
 app = webapp2.WSGIApplication([('/', MainPage),
-                               ('/rot13/?', Rot13),
+                               ('/unit2/rot13/?', Rot13),
                                ('/unit2/signup', Unit2Signup),
                                ('/unit2/welcome', Welcome),
                                ('/blog/?(?:.json)?', BlogFront),
                                ('/blog/([0-9]+)(?:.json)?', PostPage),
-                               ('/blog/flush', Flush),
                                ('/blog/newpost', NewPost),
-                               ('/blog/signup', Register),
-                               ('/blog/login', Login),
-                               ('/blog/logout', Logout),
-                               ('/blog/welcome', Unit3Welcome),
-                               ('/ascii/?', Ascii)
+                               ('/signup', Register),
+                               ('/login', Login),
+                               ('/logout', Logout),
+                               ('/unit3/welcome', Unit3Welcome),
+                               ('/unit5/ascii/?', Ascii)
                                ],
                               debug=True)
