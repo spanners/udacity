@@ -8,6 +8,8 @@ consider the cost of each:
 
 Cost/Machine + maintenance **VS** Cost/Developer
 
+Make sure you're using indexes where appropriate, tweak your queries to be simpler, rearrange your tables (ignore all that normalisation crap), make sure the queries are sane...
+
 ## _Caching_ complex operations
 
 Storing the result of an operation so that future requests return faster.
@@ -42,3 +44,5 @@ Replacing machines used now with those with faster & more memory, more diskspace
 faster CPUs etc
 
 ## _Add_ more machines
+
+Replication, sharding...

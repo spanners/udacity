@@ -346,14 +346,20 @@ def gmaps_img(points):
         for p in points)
     return GMAPS_URL + markers
 
-
-class Ascii(BlogHandler):
-  def render_front(self, title="", art="", error=""):
-
-    arts = db.GqlQuery("SELECT * FROM Art ORDER BY created DESC")
+def top_arts():
+    arts = db.GqlQuery("SELECT * " 
+                       "FROM Art "
+                       "ORDER BY created DESC "
+                       "LIMIT 10")
 
     # prevent the running of multiple queries
     arts = list(arts) #  caches the query 
+    return arts
+
+class Ascii(BlogHandler):
+  def render_front(self, title='', art='', error=''):
+
+    arts = top_arts()
 
     points = filter(None, (a.coords for a in arts))
     img_url = None
