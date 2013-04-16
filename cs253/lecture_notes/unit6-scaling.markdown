@@ -35,8 +35,31 @@ A cache is a essentially a hashtable mapping DB requests to DB responses:
             cache[request] = r
             return r
 
+**Jargon:** *Warm cache* -- requested data is already in there.
 
+### Stale Cache
 
+When you update the database but not the cache, your cache becomes out of date
+
+Fixed by either clearing the cache when DB is updated, or updating the cache along with the DB
+
+### Cache stampede
+
+Someone posts (causing DB update and thus a cache clear) and lots of people visit the site at the same time, which causes a DB read for each simultaneous visit! i.e. A cache stampede is when multiple cache misses create too much load on the database.
+
+This can be avoided by not clearing the cache, but instead overwriting it with the new data
+
+### Cachine Techniques
+
+Approach | DB read/pageview | DB read/submission | Bugs?
+--- | --- | --- | ---
+no caching | every | none | no
+naive caching | cache miss | none | yes -- stale
+clear cache | cache miss | none | no
+refresh cache | rarely -- only when cache empty | 1 | no
+update cache | 0 | 0 | no
+
+**Simple users shouldn't touch the database**
 
 ## Upgrading machines
 
@@ -46,3 +69,16 @@ faster CPUs etc
 ## _Add_ more machines
 
 Replication, sharding...
+
+# App Server Scaling
+
+* processed request
+* DB query
+* collate results
+* render HTML
+
+We can add multiple machines to handle each of these requests
+
+## Load balancer
+
+Optimised hardware that Sits between the user and all of your app servers, and Spreads requests across multiple machines. It has a list of all the app servers and decides which to forward each request to. It decides using some scheduling algorithm (round robin, or load based decision, or ...). That's all it does. It doesn't render anything, it doesn't touch the DB, it doesn't touch the cache...

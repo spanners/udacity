@@ -346,14 +346,22 @@ def gmaps_img(points):
         for p in points)
     return GMAPS_URL + markers
 
-def top_arts():
-    arts = db.GqlQuery("SELECT * " 
+CACHE = {}
+def top_arts(update = False):
+    key = 'top'
+    if not update and key in CACHE:
+        arts = CACHE[key]
+    else:
+
+        logging.error("DB QUERY")
+        arts = db.GqlQuery("SELECT * " 
                        "FROM Art "
                        "ORDER BY created DESC "
                        "LIMIT 10")
 
-    # prevent the running of multiple queries
-    arts = list(arts) #  caches the query 
+        # prevent the running of multiple queries
+        arts = list(arts) #  caches the query
+        CACHE[key] = arts 
     return arts
 
 class Ascii(BlogHandler):
@@ -383,6 +391,8 @@ class Ascii(BlogHandler):
         a.coords = coords
 
       a.put()
+      # return the query and update the cache
+      top_arts(True)
 
       self.redirect('/unit5/ascii')
     else:
