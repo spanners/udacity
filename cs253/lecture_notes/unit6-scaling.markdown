@@ -82,3 +82,32 @@ We can add multiple machines to handle each of these requests
 ## Load balancer
 
 Optimised hardware that Sits between the user and all of your app servers, and Spreads requests across multiple machines. It has a list of all the app servers and decides which to forward each request to. It decides using some scheduling algorithm (round robin, or load based decision, or ...). That's all it does. It doesn't render anything, it doesn't touch the DB, it doesn't touch the cache...
+
+# Memcached
+
+A server -- often you run it on it's own machine
+
+1. User Request comes into your app servers
+2. Chech memcached to see if it's in there
+3. If it is, send back to the user,
+4. If not, check the DB
+
+Simple. All of your app servers can interact with memcached, it supports many sockets, and you  can have many memcached servers. It's essentially a key->value dictionary, and you can hash to decide what memcached server to cache to.
+
+You can have a memcached server running on each of your
+app servers, which interact with each standalone memcached
+server, and you get this big complicated ball of
+connections... Urm... but everything works out in the end
+
+Memcached gives you these operations.
+
+		set(key, value)
+		get(key) -> value
+		delete(key)
+		flush() # clear entire cache
+
+Features:
+
+* Fast
+* Not durable
+* Limited by how much memory you have
