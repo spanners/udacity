@@ -6,7 +6,6 @@ from util import *
 from models import *
 
 from google.appengine.ext import db
-from google.appengine.api import memcache
 
 DEBUG = True
 
