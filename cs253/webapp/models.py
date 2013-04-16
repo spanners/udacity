@@ -3,7 +3,7 @@ import urllib2
 from datetime import datetime, timedelta
 from xml.dom import minidom
 
-from util import *
+from utils import *
 
 from google.appengine.ext import db
 from google.appengine.api import memcache
