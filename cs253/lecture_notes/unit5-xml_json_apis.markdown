@@ -19,7 +19,7 @@ We might want our server to make requests to other servers for data, in order to
 
 Browsers are very permissive with HTML. It doesn't have to adhere to strict standards in order for browsers to render it, and it is thus sometimes unstructured/error-prone.
 
-This makes parsing HTML for collation/maniupulation of data very tricky.
+This makes parsing HTML for collation/manipulation of data very tricky.
 
 # XML
 
