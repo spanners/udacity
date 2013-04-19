@@ -5,6 +5,6 @@ class BlogFront(BaseHandler):
     def get(self):
         posts, age = get_posts()
         if self.format == 'html':
-            self.render('front.html', posts = posts, age = age_str(age))
+            self.render('blogfront.html', posts = posts, age = age_str(age))
         else:
             return self.render_json([p.as_dict() for p in posts])
