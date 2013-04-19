@@ -1,5 +1,5 @@
 from BaseHandler import BaseHandler
-from Post import Post, blog_key, add_post
+from lib.db.Post import Post, blog_key, add_post
 
 class NewPost(BaseHandler):
     def get(self):

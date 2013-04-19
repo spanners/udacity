@@ -1,5 +1,5 @@
 import webapp2
-from Post import flush_cache
+from lib.db.Post import flush_cache
 
 class Flush(webapp2.RequestHandler):
     def get(self):

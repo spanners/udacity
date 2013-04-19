@@ -1,5 +1,5 @@
 from BaseHandler import BaseHandler
-from User import User
+from lib.db.User import User
 
 class Login(BaseHandler):
     def get(self):

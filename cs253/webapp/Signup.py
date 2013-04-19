@@ -1,6 +1,6 @@
 from BaseHandler import BaseHandler
-from utils import valid_username, valid_password, valid_email
-from User import User
+from lib.utils import valid_username, valid_password, valid_email
+from lib.db.User import User
 
 class Signup(BaseHandler):
     def get(self):

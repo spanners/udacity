@@ -12,7 +12,7 @@ from Ascii import Ascii
 from Flush import Flush
 from MainPage import MainPage
 
-DEBUG = True
+DEBUG = False
 
 app = webapp2.WSGIApplication([('/', MainPage),
                                ('/rot13/?', Rot13),

@@ -1,5 +1,5 @@
 from BaseHandler import BaseHandler
-from Art import Art, art_key, top_arts, gmap_img, get_coords
+from lib.db.Art import Art, art_key, top_arts, gmap_img, get_coords
 
 class Ascii(BaseHandler):
     def render_front(self, title="", art="", error=""):

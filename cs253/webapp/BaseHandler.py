@@ -1,8 +1,8 @@
 import webapp2
 import json
 
-from utils import jinja_str, make_secure_val, check_secure_val
-from User import User
+from lib.utils import jinja_str, make_secure_val, check_secure_val
+from lib.db.User import User
 
 class BaseHandler(webapp2.RequestHandler):
     def write(self, *a, **kw):

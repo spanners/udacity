@@ -1,5 +1,5 @@
 from BaseHandler import BaseHandler
-from Post import get_posts, age_str
+from lib.db.Post import get_posts, age_str
 
 class BlogFront(BaseHandler):
     def get(self):
