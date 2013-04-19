@@ -12,7 +12,18 @@ class Login(BaseHandler):
         u = User.login(username, password)
         if u:
             self.login(u)
-            self.redirect('/blog/welcome')
+            self.done()
         else:
             msg = 'Invalid login'
             self.render('login-form.html', error = msg)
+
+    def done(self, *a, **kw):
+        raise NotImplementedError
+
+class BlogLogin(Login):
+    def done(self):
+        self.redirect('/blog/welcome')
+
+class WikiLogin(Login):
+    def done(self):
+        self.redirect('/wiki')

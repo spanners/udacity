@@ -43,16 +43,26 @@ class Unit2Signup(Signup):
     def done(self):
         self.redirect('/unit2/welcome?username=' + self.username)
 
-class Register(Signup):
+class UserSignup(Signup):
     def done(self):
-        #make sure the user doesn't already exist
         u = User.by_name(self.username)
         if u:
-            msg = 'That user already exists.'
-            self.render('signup-form.html', error_username = msg)
+            msg = 'That user already exists'
+            self.redner('signup-form.html', error_username = msg)
         else:
             u = User.register(self.username, self.password, self.email)
             u.put()
 
             self.login(u)
-            self.redirect('/blog/welcome')
+            self.signin()
+
+    def signin(self, *a, **kw):
+        raise NotImplementedError
+
+class BlogSignup(UserSignup):
+    def signin(self):
+        self.redirect('/blog/welcome')
+
+class WikiSignup(UserSignup):
+    def signin(self):
+        self.redirect('/wiki')
