@@ -1,5 +1,9 @@
 {% extends "wikibase.html" %}
 
 {% block content %}
+  {{page.render() | safe}}
 
+  <div class="age">
+	{{age}}
+  </div>
 {% endblock %}

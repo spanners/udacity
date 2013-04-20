@@ -14,16 +14,22 @@ from Flush import Flush
 
 from MainPage import MainPage
 
-from WikiFront import WikiFront
+from WikiPage import WikiPage
+from WikiEditPage import WikiEditPage
 
-DEBUG = False
 
+
+
+DEBUG = True
+
+PAGE_RE = r'(/(?:[a-zA-Z0-9_-]+/?)*)'
 app = webapp2.WSGIApplication([('/', MainPage),
 
-                               ('/wiki', WikiFront),
                                ('/wiki/logout', WikiLogout),
                                ('/wiki/login', WikiLogin),
                                ('/wiki/signup', WikiSignup),
+                               ('/wiki/_edit' + PAGE_RE, WikiEditPage),
+                               ('/wiki' + PAGE_RE, WikiPage),
 
                                ('/rot13/?', Rot13),
                                ('/blog/?(?:.json)?', BlogFront),
@@ -36,4 +42,4 @@ app = webapp2.WSGIApplication([('/', MainPage),
                                ('/blog/welcome', Welcome),
                                ('/ascii/?', Ascii),
                                ],
-                              debug=True)
+                              debug=DEBUG)

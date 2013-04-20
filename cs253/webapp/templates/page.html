@@ -1,0 +1,11 @@
+<div class="page">
+ 
+    <div class="page-date">
+      {{p.created.strftime("%b %d, %Y")}}
+    </div>
+  </div>
+
+  <div class="page-content">
+    {{p._render_text | safe}}
+  </div>
+</div>
