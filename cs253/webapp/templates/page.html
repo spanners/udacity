@@ -1,8 +1,13 @@
 {% extends "wikibase.html" %}
+
+{% block controls %}
+  {% if user %}
+  <a class="grey-link" href = "/wiki/_edit{{path}}">edit</a>
+   | 
+  {% endif %}
+  <a class="grey-link" href="/wiki/_history{{path}}">history</a>
+{% endblock %}
+
 {% block content %}
-  <div class="edit-area">
-  	<a class="edit-link" href = "/wiki/_edit{{path}}">edit</a>
-      |
-  </div>
-{{page._render_text | safe}}
+  {{page.render() | safe}}
 {% endblock %}

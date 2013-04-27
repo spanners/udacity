@@ -3,7 +3,6 @@ from lib.db.Page import Page
 
 class WikiHandler(BaseHandler):
     def get(self, path):
-
         v = self.request.get('v')
         p = None
         if v:

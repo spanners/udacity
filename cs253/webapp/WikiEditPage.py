@@ -3,6 +3,8 @@ from lib.db.Page import Page
 
 class WikiEditPage(WikiHandler):
     def done(self, page="", path=""):
+        if not self.user:
+            self.redirect("/wiki/login")
         self.render("editpage.html", path = path, page = page)
 
     def post(self, path):

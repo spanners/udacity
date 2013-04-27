@@ -1,12 +1,19 @@
 {% extends "wikibase.html" %}
+
+{% block controls %}
+  {% if page %}
+    <a class="grey-link" href="/wiki{{path}}">view</a>
+      |
+      <a class="grey-link" href="/wiki/_history{{path}}">history</a>
+  {% endif %}
+{% endblock %}
+  	
 {% block content %}
-  <div class="edit-area">
-  	<a class="edit-link" href = "/wiki{{path}}">view</a>
-    |
-  </div>
-      <form method="post">
-      <textarea name="content">{{page.content}}</textarea>
-      <br>
-      <input type="submit">
-    </form>
+<form class="main-edit"
+      method="post">
+      <textarea name="content">{{page and page.content or ""}}</textarea>
+      <div class="form-footer">
+      	<button type="submit">Save</button>
+  	  </div>
+</form>
 {% endblock %}

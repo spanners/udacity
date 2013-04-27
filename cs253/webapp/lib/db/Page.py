@@ -5,8 +5,6 @@ import logging
 from google.appengine.ext import db
 from google.appengine.api import memcache
 
-from ..utils import jinja_str
-
 def age_set(key, val):
     save_time = datetime.utcnow()
     memcache.set(key, (val, save_time))
@@ -79,8 +77,7 @@ class Page(db.Model):
 
 
     def render(self):
-        self._render_text = self.content.replace('\n', '<br>')
-        #return jinja_str("page.html", page = self)
+        return self.content.replace('\n', '<br>')
 
     def as_dict(self):
         time_fmt = '%c'

@@ -1,7 +1,7 @@
 import webapp2
 import json
 
-from lib.utils import jinja_str, make_secure_val, check_secure_val
+from lib.utils import grey_style, jinja_str, make_secure_val, check_secure_val
 from lib.db.User import User
 
 class BaseHandler(webapp2.RequestHandler):
@@ -10,6 +10,7 @@ class BaseHandler(webapp2.RequestHandler):
 
     def render_str(self, template, **params):
         params['user'] = self.user
+        params['grey_style'] = grey_style
         return jinja_str(template, **params)
 
     def render(self, template, **kw):

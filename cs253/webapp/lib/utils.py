@@ -51,3 +51,11 @@ def valid_password(password):
 EMAIL_RE  = re.compile(r'^[\S]+@[\S]+\.[\S]+$')
 def valid_email(email):
     return not email or EMAIL_RE.match(email)
+
+
+def grey_style(lst):
+    for n, x in enumerate(lst):
+        if n % 2 == 0:
+            yield x, ''
+        else:
+            yield x, 'grey'

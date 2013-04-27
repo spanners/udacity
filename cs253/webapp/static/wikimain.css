@@ -1,62 +1,97 @@
+html {
+    height: 100%;
+}
+
 body {
     position: relative;
+    height: 100%;
+
     font-family: Helvetica, Arial, sans-serif;
     font-size: 14px;
 
     width: 800px;
     margin: 0 auto;
-    padding: 10px;
     color: #333;
 }
 
-.edit-area {
-    font-size: 13 px;
-    color: gray;
-    position: absolute;
-    top: 10px;
-    right: 200px;
+.header {
+    height: 30px;
+    line-height: 30px;
+
+    margin-bottom: 10px;
 }
 
-.edit-link {
-    color: gray;
-    text-decoration: none;
-}
-
-.edit-link:visited {
-    color: gray;
-}
-
-.edit-link:hover {
-    text-decoration: underline;
-}
-
-.login-area {
+.controls {
+    float: right;
     font-size: 13px;
     color: gray;
-    position: absolute;
-    top: 10px;
-    right: 10px;
 }
 
-.login-link {
+.controls + .controls {
+    margin-right: 20px;
+}
+
+.grey-link {
     color: gray;
     text-decoration: none;
 }
 
-.login-link:visited {
+.grey-link:visited {
     color: gray;
 }
 
-.login-link:hover {
+.grey-link:hover {
     text-decoration: underline;
 }
 
-h2 {
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 20px;
+.main-edit {
+    position: absolute;
+    top: 45px;
+    right: 0;
+    bottom: 10px;
+    left: 0;
 }
 
+.main-edit textarea {
+    position: absolute;
+    top: 0;
+    bottom: 30px;
+    left: 0;
+    right: 0;
+    font-size: 14px;
+}
+
+.main-edit button {
+    font-size: 18px;
+}
+
+.form-footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 30px;
+}
+
+.history-table {
+    border-collapse: collapse;
+}
+
+.history-table .grey {
+    background-color: #eee;
+}
+
+.history-table .date-cell {
+    width: 150px;
+}
+
+.history-table .content-cell {
+    padding: 10px;
+}
+
+.history-table .link-cell {
+    padding: 0 5px;
+}
 .error {
     color: red;
 }
@@ -86,38 +121,4 @@ textarea {
 
 input[type=submit] {
   font-size: 24px;
-}
-
-.main-title {
-    display: block;
-    color: #222;
-    font-size: 40px;
-    font-weight: bold;
-    text-align: center;
-    margin-bottom: 30px;
-    text-decoration: none;
-}
-
-.page + .page {
-    margin-top: 15px;
-}
-
-.page-date {
-    position: absolute;
-    right: 0px;
-    bottom: 0px;
-    color: #999;
-
-}
-
-.page-content {
-    margin-top: 5px;
-}
-
-.age {
-    position: absolute;
-    bottom: 0px;
-    right: 0px;
-    color: deeppink;
-    font-size: 12px;
 }
