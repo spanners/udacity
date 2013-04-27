@@ -7,13 +7,13 @@
 </head>
 
 <body>
-  <a href="/wiki" class="main-title">
+  <a href="/wiki/" class="main-title">
     Swash Wiki
   </a>
 
-  <div class="login-area">
+<div class="login-area">
     {% if user %}
-      {{user.name}} (<a class="login-link" href="/wiki/logout">logout</a>)
+    {{user.name}} (<a class="login-link" href="/wiki/logout">logout</a>)
     {% else %}
       <a class="login-link" href="/wiki/login">login</a>
       |

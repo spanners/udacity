@@ -4,10 +4,16 @@ from lib.db.User import User
 
 class Signup(BaseHandler):
     def get(self):
-        self.render("signup-form.html")
+        self.next_url = self.request.headers.get('referer', '/')
+        self.render("signup-form.html", next_url = self.next_url)
 
     def post(self):
         have_error = False
+
+        self.next_url = str(self.request.get('next_url'))
+        if not self.next_url or self.next_url.startswith('/login'):
+            self.next_url = '/'
+
         self.username = self.request.get('username')
         self.password = self.request.get('password')
         self.verify = self.request.get('verify')
@@ -65,4 +71,4 @@ class BlogSignup(UserSignup):
 
 class WikiSignup(UserSignup):
     def signin(self):
-        self.redirect('/wiki')
+        self.redirect('/wiki' + self.next_url)

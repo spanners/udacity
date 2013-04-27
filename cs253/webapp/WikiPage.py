@@ -1,23 +1,21 @@
 from BaseHandler import BaseHandler
-from lib.db.Page import age_get, age_set, age_str, wiki_key
-
-from google.appengine.ext import db
+from lib.db.Page import Page
 
 class WikiPage(BaseHandler):
-    def get(self, page_id):
-        page_id = page_id[1:]
-        page_key = 'page_' + page_id
+    def get(self, path):
 
-        page, age = age_get(page_key)
-        if not page:
-            key = db.Key.from_path('Page', int(page_id), parent=wiki_key)
-            page = db.get(key)
-            age_set(page_key, page)
-            age = 0
+        v = self.request.get('v')
+        p = None
+        if v:
+            if v.isdigit():
+                p = Page.by_id(int(v), path)    
+            if not p:
+                return self.notfound()
+        else:
+            p = Page.by_path(path).get()
 
-        if not page:
-            self.render('editpage.html', content = None)
-        elif self.format == 'html':
-            self.render("wikilink.html", page = page, age = age_str(age))
-        elif self.format == 'json':
-            self.render_json(page.as_dict())
+        if p:
+            p.render()
+            self.render("page.html", page = p, path = path)
+        else: 
+            self.redirect('/wiki/_edit' + path)

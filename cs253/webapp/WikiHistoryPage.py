@@ -3,7 +3,7 @@ from lib.db.Page import Page
 
 import logging
 
-class WikiEditPage(BaseHandler):
+class WikiHistoryPage(BaseHandler):
     def get(self, path):
         if not self.user:
             self.redirect("/wiki/login")

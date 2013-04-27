@@ -16,6 +16,7 @@ from MainPage import MainPage
 
 from WikiPage import WikiPage
 from WikiEditPage import WikiEditPage
+from WikiHistoryPage import WikiHistoryPage
 
 
 
@@ -25,10 +26,11 @@ DEBUG = True
 PAGE_RE = r'(/(?:[a-zA-Z0-9_-]+/?)*)'
 app = webapp2.WSGIApplication([('/', MainPage),
 
-                               ('/wiki/logout', WikiLogout),
-                               ('/wiki/login', WikiLogin),
                                ('/wiki/signup', WikiSignup),
+                               ('/wiki/login', WikiLogin),
+                               ('/wiki/logout', WikiLogout),                               
                                ('/wiki/_edit' + PAGE_RE, WikiEditPage),
+                               ('/wiki/_history' + PAGE_RE, WikiHistoryPage),
                                ('/wiki' + PAGE_RE, WikiPage),
 
                                ('/rot13/?', Rot13),

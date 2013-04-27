@@ -1,11 +1,8 @@
-<div class="page">
- 
-    <div class="page-date">
-      {{p.created.strftime("%b %d, %Y")}}
-    </div>
+{% extends "wikibase.html" %}
+{% block content %}
+  <div class="edit-area">
+  	<a class="edit-link" href = "/wiki/_edit{{path}}">edit</a>
+      |
   </div>
-
-  <div class="page-content">
-    {{p._render_text | safe}}
-  </div>
-</div>
+{{page._render_text | safe}}
+{% endblock %}

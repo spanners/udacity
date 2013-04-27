@@ -1,8 +1,12 @@
 {% extends "wikibase.html" %}
-
 {% block content %}
-    <form method="post">
-      <textarea name="content">{{content}}</textarea>
+  <div class="edit-area">
+  	<a class="edit-link" href = "/wiki{{path}}">view</a>
+    |
+  </div>
+      <form method="post">
+      <textarea name="content">{{page.content}}</textarea>
+      <br>
       <input type="submit">
     </form>
 {% endblock %}
