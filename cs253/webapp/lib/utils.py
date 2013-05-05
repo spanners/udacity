@@ -10,14 +10,16 @@ from string import letters
 
 import jinja2
 
+from jinja2_markdown.extensions import MarkdownExtension
+
 template_dir = os.path.join(os.path.dirname(__file__), '../templates')
 jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir),
-                               autoescape = True)
+                               autoescape = True,
+                               extensions = [MarkdownExtension])
 
 def jinja_str(template, **params):
     t = jinja_env.get_template(template)
     return t.render(params)
-
 
 def make_salt(length = 5):
     return ''.join(random.choice(letters) for x in xrange(length))
