@@ -18,9 +18,6 @@ from WikiPage import WikiPage
 from WikiEditPage import WikiEditPage
 from WikiHistoryPage import WikiHistoryPage
 
-
-
-
 DEBUG = True
 
 PAGE_RE = r'(/(?:[a-zA-Z0-9_-]+/?)*)'
