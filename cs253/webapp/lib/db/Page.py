@@ -75,10 +75,6 @@ class Page(db.Model):
     def by_id(cls, page_id, path):
         return cls.get_by_id(page_id, cls.parent_key(path))
 
-
-    def render(self):
-        return self.content.replace('\n', '<br>')
-
     def as_dict(self):
         time_fmt = '%c'
         d = {'content': self.content,
