@@ -2,8 +2,9 @@
 
 {% block content %}
 
+
   {% for p in posts %}
-    {{ p.render() }}
+    {{ p.render() | safe}}
     <br><br>
   {% endfor %}
 

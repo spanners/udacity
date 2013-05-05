@@ -9,5 +9,7 @@
 {% endblock %}
 
 {% block content %}
-  {{page.render() }}
+{% markdown %}
+{{ page.content }}
+{% endmarkdown %}
 {% endblock %}
