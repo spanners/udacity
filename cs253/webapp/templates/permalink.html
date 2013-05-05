@@ -1,7 +1,7 @@
 {% extends "blogbase.html" %}
 
 {% block content %}
-  {{post.render()}}
+  {{post.render() | safe}}
 
   <div class="age">
 	{{age}}
