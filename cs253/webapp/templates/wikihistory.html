@@ -10,7 +10,7 @@
 
 {% block content %}
 <table class="history-table">
-	{% for p, rowstyle in grey_style(posts) %}
+	{% for p, rowstyle in grey_style(pages) %}
 	  <tr class="{{rowstyle}}">
 	  	<td class="date-cell">
 	  		{{ p.last_modified.strftime("%c") }}
