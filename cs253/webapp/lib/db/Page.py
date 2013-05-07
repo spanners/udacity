@@ -1,7 +1,5 @@
 from datetime import datetime, timedelta
 
-import logging
-
 from google.appengine.ext import db
 from google.appengine.api import memcache
 
@@ -20,7 +18,6 @@ def age_get(key):
 
 def add_page(page):
     page.put()
-    logging.error("DB INSERT")
     get_pages(update = True)
     return str(page.key().id())
 
@@ -35,7 +32,6 @@ def get_pages(update = False):
                         "ORDER BY created DESC "
                         "LIMIT 10",
                         wiki_key)
-        logging.error("DB QUERY")
         pages = list(q)
         age_set(mc_key, pages)
 
@@ -50,7 +46,6 @@ def age_str(age):
 
 def flush_cache():
     memcache.flush_all()
-
 
 
 wiki_key = db.Key.from_path('Wikis', 'wikis')

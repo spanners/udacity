@@ -48,8 +48,7 @@ def age_str(age):
 
 def flush_cache():
     memcache.flush_all()
-
-
+    
 
 blog_key = db.Key.from_path('Blogs', 'blogs')
 

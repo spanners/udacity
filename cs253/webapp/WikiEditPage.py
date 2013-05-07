@@ -1,8 +1,8 @@
 from WikiHandler import WikiHandler
-from lib.db.Page import Page
+from lib.db.Page import Page, add_page
 
 class WikiEditPage(WikiHandler):
-    def done(self, page="", path=""):
+    def done(self, page="", path="", age=""):
         if not self.user:
             self.redirect("/wiki/login")
         self.render("editpage.html", path = path, page = page)
@@ -19,6 +19,6 @@ class WikiEditPage(WikiHandler):
             return
         elif not old_page or old_page.content != content:
             p = Page(parent = Page.parent_key(path), content = content)
-            p.put()
+            add_page(p)
 
         self.redirect('/wiki' + path)

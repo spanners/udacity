@@ -122,3 +122,11 @@ textarea {
 input[type=submit] {
   font-size: 24px;
 }
+
+.age {
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    color: deeppink;
+    font-size: 12px;
+}
