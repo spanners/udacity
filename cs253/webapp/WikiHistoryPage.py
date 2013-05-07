@@ -1,13 +1,14 @@
 from BaseHandler import BaseHandler
-from lib.db.Page import Page
+from lib.db.Page import get_pages
+
+#import logging
 
 class WikiHistoryPage(BaseHandler):
     def get(self, path):
-        q = Page.by_path(path)
-        q.fetch(limit = 100)
+        pages, age = get_pages(path)
 
-        posts = list(q)
-        if posts:
-            self.render("wikihistory.html", path = path, posts = posts)
+        if pages:
+        	#logging.error("PS Used Memcached")
+        	self.render("wikihistory.html", path = path, pages = pages)
         else:
             self.redirect("/wiki/_edit" + path)

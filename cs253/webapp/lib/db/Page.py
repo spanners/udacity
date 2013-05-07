@@ -16,24 +16,18 @@ def age_get(key):
         val, age = None, 0
     return val, age
 
-def add_page(page):
+def add_page(path, page):
     page.put()
-    get_pages(update = True)
+    get_pages(path, update = True)
     return str(page.key().id())
 
-def get_pages(update = False):
-    mc_key = 'WIKIS'
-
-    pages, age = age_get(mc_key)
+def get_pages(path = "", update = False):
+    pages, age = age_get(path)
     if update or pages is None:
-        q = db.GqlQuery("SELECT * "
-                        "FROM Page "
-                        "WHERE ANCESTOR IS :1 "
-                        "ORDER BY created DESC "
-                        "LIMIT 10",
-                        wiki_key)
+        q = Page.by_path(path)
+        q.fetch(limit = 10)
         pages = list(q)
-        age_set(mc_key, pages)
+        age_set(path, pages)
 
     return pages, age
 

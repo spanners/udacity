@@ -1,5 +1,5 @@
 from WikiHandler import WikiHandler
-from lib.db.Page import Page, add_page
+from lib.db.Page import Page, add_page, age_set
 
 class WikiEditPage(WikiHandler):
     def done(self, page="", path="", age=""):
@@ -19,6 +19,8 @@ class WikiEditPage(WikiHandler):
             return
         elif not old_page or old_page.content != content:
             p = Page(parent = Page.parent_key(path), content = content)
-            add_page(p)
+            add_page(path, p)
+            page_key = 'PAGE_' + path
+            age_set(page_key, p)
 
         self.redirect('/wiki' + path)
