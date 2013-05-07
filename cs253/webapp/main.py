@@ -28,7 +28,7 @@ app = webapp2.WSGIApplication([('/', MainPage),
                                ('/wiki/logout', WikiLogout),                               
                                ('/wiki/_edit' + PAGE_RE, WikiEditPage),
                                ('/wiki/_history' + PAGE_RE, WikiHistoryPage),
-                               ('/wiki' + PAGE_RE, WikiPage),
+                               ('/wiki' + PAGE_RE + '(?:.json)?', WikiPage),
 
                                ('/rot13/?', Rot13),
                                ('/blog/?(?:.json)?', BlogFront),
