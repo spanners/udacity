@@ -10,7 +10,7 @@ from string import letters
 
 import jinja2
 
-from j2_md.jinja2_markdown.extensions import MarkdownExtension
+from jinja2_markdown.extensions import MarkdownExtension
 
 template_dir = os.path.join(os.path.dirname(__file__), '../templates')
 jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir),
