@@ -10,6 +10,11 @@
 
 {% block content %}
 <table class="history-table">
+	<tr class="header">
+		<th>Date</th>
+		<th>Author</th>
+		<th>Content</th>
+	</tr>
 	{% for p, rowstyle in grey_style(pages) %}
 	  <tr class="{{rowstyle}}">
 	  	<td class="date-cell">
