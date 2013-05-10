@@ -1,3 +1,0 @@
-[submodule "cs253/webapp/j2_md"]
-	path = cs253/webapp/j2_md
-	url = git://github.com/qnub/Jinja2-Markdown.git
