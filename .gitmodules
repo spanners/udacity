@@ -1,3 +1,6 @@
-[submodule "jinja2_markdown"]
-	path = jinja2_markdown
+[submodule "cs253/webapp/j2_md"]
+	path = cs253/webapp/j2_md
 	url = git://github.com/qnub/Jinja2-Markdown.git
+[submodule "cs253/webapp/py_md"]
+	path = cs253/webapp/py_md
+	url = git://github.com/trentm/Python-Markdown.git
