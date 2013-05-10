@@ -85,6 +85,10 @@ body {
     width: 150px;
 }
 
+.history-table .author-cell {
+    padding: 5px;
+}
+
 .history-table .content-cell {
     padding: 10px;
 }

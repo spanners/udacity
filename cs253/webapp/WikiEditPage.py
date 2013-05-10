@@ -13,12 +13,13 @@ class WikiEditPage(WikiHandler):
             return
 
         content = self.request.get('content')
+        author = self.user.name
         old_page = Page.by_path(path).get()
 
         if not(old_page or content):
             return
         elif not old_page or old_page.content != content:
-            p = Page(parent = Page.parent_key(path), content = content)
+            p = Page(parent = Page.parent_key(path), content = content, author = author)
             add_page(path, p)
             page_key = 'PAGE_' + path
             age_set(page_key, p)
