@@ -1,0 +1,3 @@
+[submodule "jinja2_markdown"]
+	path = jinja2_markdown
+	url = git://github.com/qnub/Jinja2-Markdown.git
