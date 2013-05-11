@@ -1,5 +1,8 @@
 *.py[cod]
 
+# Deployment Configuration file
+deploy_config.py
+
 # C extensions
 *.so
 

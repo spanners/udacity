@@ -4,7 +4,7 @@ import hmac
 import re
 import os
 
-from config import secret
+from deploy_config import secret
 
 from string import letters
 
