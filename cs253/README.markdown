@@ -8,6 +8,7 @@
 	* Wiki -- a wiki with history, using markdown and memcached
 
     Notes: 
+
     1. Wiki and Blog use the same user accounts, so a login in one persists in the other.
     2. You must create your own lib/deploy\_config.py with a secret in order for
        signups to work.
