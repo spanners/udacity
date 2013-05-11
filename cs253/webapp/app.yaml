@@ -12,8 +12,24 @@ handlers:
   static_files: static/favicon.ico
   upload: static/favicon.ico
 
-- url: /.*
+- url: /robots.txt
+  static_files: static/robots.txt
+  upload: static/robots.txt
+
+- url: /
   script: main.app
+
+- url: /rot13
+  script: rot13.app
+
+- url: /ascii
+  script: ascii.app
+
+- url: /blog
+  script: blog.app
+
+- url: /wiki/
+  script: wiki.app
 
 libraries:
 - name: jinja2
@@ -24,4 +40,3 @@ libraries:
 
 - name: markupsafe
   version: latest
-
