@@ -16,4 +16,4 @@ Notes:
    linux to access a subdirectory within a remote github repo. After git
    clone, to work
    around this, merely **delete** `jinja2_markdown` and `markdown` files, and
-   **rename** `j2_md` and `md` to `jinja2_markdown` and `markdown`, respectively
+   **rename** `j2_md` and `md` directories to `jinja2_markdown` and `markdown`, respectively
