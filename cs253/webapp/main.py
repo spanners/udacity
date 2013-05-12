@@ -10,7 +10,6 @@ from Ascii import Ascii
 
 from Signup import BlogSignup
 from Welcome import Welcome
-from BlogFront import BlogFront
 from PostPage import PostPage
 from NewPost import NewPost
 from Login import BlogLogin
