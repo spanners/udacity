@@ -37,7 +37,11 @@ app = WSGIApplication([
                                ('/ascii/?', Ascii),
 
 
-    Route(r'/blog', handler='handlers.BlogFront.BlogFront', name='front'),
+        Route(r'/blog<:/?(?:.json)?>',
+        handler='handlers.blog.BlogFront.BlogFront', 
+        name='front',
+        handler_method='get'),
+
                                ('/blog/([0-9]+)(?:.json)?', PostPage),
                                ('/blog/flush', Flush),
                                ('/blog/newpost', NewPost),
