@@ -1,4 +1,6 @@
-import webapp2
+import os
+
+from webapp2 import WSGIApplication, Route
 
 from MainPage import MainPage
 
@@ -22,18 +24,21 @@ from WikiPage import WikiPage
 from WikiEditPage import WikiEditPage
 from WikiHistoryPage import WikiHistoryPage
 
+# Set useful fields
+root_dir = os.path.dirname(__file__)
+template_dir = os.path.join(root_dir, 'templates')
 DEBUG = False
-
 PAGE_RE = r'(/(?:[a-zA-Z0-9_-]+/?)*)'
 
-app = webapp2.WSGIApplication([
+app = WSGIApplication([
                                ('/', MainPage),
 
                                ('/rot13/?', Rot13),
 
                                ('/ascii/?', Ascii),
 
-                               ('/blog/?(?:.json)?', BlogFront),
+
+    Route(r'/blog', handler='handlers.BlogFront.BlogFront', name='front'),
                                ('/blog/([0-9]+)(?:.json)?', PostPage),
                                ('/blog/flush', Flush),
                                ('/blog/newpost', NewPost),
