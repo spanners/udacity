@@ -1,9 +1,9 @@
-from BaseHandler import BaseHandler
+from handlers.user import UserHandler
 from lib.db.Post import age_get, age_set, age_str, blog_key
 
 from google.appengine.ext import db
 
-class PostPage(BaseHandler):
+class PostPage(UserHandler):
     def get(self, post_id):
         post_key = 'POST_' + post_id
 

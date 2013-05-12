@@ -10,7 +10,6 @@ from Ascii import Ascii
 
 from Signup import BlogSignup
 from Welcome import Welcome
-from PostPage import PostPage
 from NewPost import NewPost
 from Login import BlogLogin
 from Logout import BlogLogout
@@ -38,11 +37,15 @@ app = WSGIApplication([
 
 
         Route(r'/blog<:/?(?:.json)?>',
-        handler='handlers.blog.BlogFront.BlogFront', 
-        name='front',
-        handler_method='get'),
+            handler='handlers.blog.BlogFront.BlogFront', 
+            name='front',
+            handler_method='get'),
 
-                               ('/blog/([0-9]+)(?:.json)?', PostPage),
+        Route(r'/blog/<post_id:[0-9]+><:(?:.json)?>',
+            handler='handlers.blog.PostPage.PostPage',
+            name='page',
+            handler_method='get'),
+
                                ('/blog/flush', Flush),
                                ('/blog/newpost', NewPost),
                                ('/blog/signup', BlogSignup),
