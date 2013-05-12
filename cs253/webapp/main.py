@@ -10,7 +10,6 @@ from Ascii import Ascii
 
 from Signup import BlogSignup
 from Welcome import Welcome
-from NewPost import NewPost
 from Login import BlogLogin
 from Logout import BlogLogout
 from Flush import Flush
@@ -25,7 +24,9 @@ from WikiHistoryPage import WikiHistoryPage
 # Set useful fields
 root_dir = os.path.dirname(__file__)
 template_dir = os.path.join(root_dir, 'templates')
+
 DEBUG = False
+
 PAGE_RE = r'(/(?:[a-zA-Z0-9_-]+/?)*)'
 
 app = WSGIApplication([
@@ -37,21 +38,25 @@ app = WSGIApplication([
 
 
         Route(r'/blog<:/?(?:.json)?>',
-            handler='handlers.blog.BlogFront.BlogFront', 
+            handler='handlers.blog.BlogFront.BlogFront',
             name='front',
             handler_method='get'),
 
-        Route(r'/blog/<post_id:[0-9]+><:(?:.json)?>',
+        Route(r'/blog/<post_id:[0-9]+><garbage:(?:.json)?>',
             handler='handlers.blog.PostPage.PostPage',
             name='page',
             handler_method='get'),
 
-                               ('/blog/flush', Flush),
-                               ('/blog/newpost', NewPost),
+        Route(r'/blog/newpost',
+            handler='handlers.blog.NewPost.NewPost',
+            name='newpost'),
+
+
                                ('/blog/signup', BlogSignup),
                                ('/blog/login', BlogLogin),
                                ('/blog/logout', BlogLogout),
                                ('/blog/welcome', Welcome),
+                               ('/blog/flush', Flush),
 
                                ('/wiki/signup', WikiSignup),
                                ('/wiki/login', WikiLogin),

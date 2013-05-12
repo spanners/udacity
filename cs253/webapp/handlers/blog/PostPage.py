@@ -4,7 +4,7 @@ from lib.db.Post import age_get, age_set, age_str, blog_key
 from google.appengine.ext import db
 
 class PostPage(UserHandler):
-    def get(self, post_id):
+    def get(self, post_id, garbage):
         post_key = 'POST_' + post_id
 
         post, age = age_get(post_key)

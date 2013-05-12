@@ -1,7 +1,7 @@
-from BaseHandler import BaseHandler
+from handlers.user import UserHandler
 from lib.db.Post import Post, blog_key, add_post
 
-class NewPost(BaseHandler):
+class NewPost(UserHandler):
     def get(self):
         if self.user:
             self.render("newpost.html")
@@ -10,7 +10,7 @@ class NewPost(BaseHandler):
 
     def post(self):
         if not self.user:
-            self.redirect('/blog')
+            self.redirect_to('front')
 
         subject = self.request.get('subject')
         content = self.request.get('content')
@@ -18,7 +18,7 @@ class NewPost(BaseHandler):
         if subject and content:
             p = Post(parent = blog_key, subject = subject, content = content)
             post_id = add_post(p)
-            self.redirect('/blog/%s' % post_id)
+            self.redirect_to('page', post_id = post_id, garbage = "")
         else:
             error = "subject and content, please!"
             self.render("newpost.html", subject=subject, content=content, error=error)
