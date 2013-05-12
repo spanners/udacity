@@ -20,10 +20,10 @@ class AppHandler(webapp2.RequestHandler):
         """Write an arbitrary string to the response stream."""
         self.response.out.write(*a, **kw)
 
-    def render_str(self, template_name, **kwargs):
+    def render_str(self, template_name, **params):
         """Render a jinja2 template and return it as a string."""
         template = self.jinja.get_template(template_name)
-        return template.render(**kwargs)
+        return template.render(**params)
 
     def render_json(self, d):
         json_txt = json.dumps(d)

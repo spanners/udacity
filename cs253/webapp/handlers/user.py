@@ -12,6 +12,7 @@ class UserHandler(AppHandler):
         template = self.jinja.get_template(template_name)
         params['user'] = self.user
         params['grey_style'] = grey_style
+        params['redirect_to'] = self.redirect_to
         return template.render(**params)
 
     def set_secure_cookie(self, name, val):

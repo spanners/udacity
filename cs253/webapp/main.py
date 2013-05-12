@@ -1,6 +1,7 @@
 import os
 
 from webapp2 import WSGIApplication, Route
+from webapp2_extras import routes
 
 from MainPage import MainPage
 
@@ -36,34 +37,35 @@ app = WSGIApplication([
 
                                ('/ascii/?', Ascii),
 
+        routes.PathPrefixRoute('/blog', [
 
-        Route(r'/blog<:/?(?:.json)?>',
-            handler='handlers.blog.BlogFront.BlogFront',
-            name='front',
-            handler_method='get'),
+            Route(r'/<:(?:.json)?>',
+                handler='handlers.blog.BlogFront.BlogFront',
+                name='front',
+                handler_method='get'),
 
-        Route(r'/blog/<post_id:[0-9]+><garbage:(?:.json)?>',
+        Route(r'/<post_id:[0-9]+><garbage:(?:.json)?>',
             handler='handlers.blog.PostPage.PostPage',
             name='page',
             handler_method='get'),
 
-        Route(r'/blog/newpost',
+        Route(r'/newpost',
             handler='handlers.blog.NewPost.NewPost',
             name='newpost'),
+        ]),
 
+       ('/blog/signup', BlogSignup),
+       ('/blog/login', BlogLogin),
+       ('/blog/logout', BlogLogout),
+       ('/blog/welcome', Welcome),
+       ('/blog/flush', Flush),
 
-                               ('/blog/signup', BlogSignup),
-                               ('/blog/login', BlogLogin),
-                               ('/blog/logout', BlogLogout),
-                               ('/blog/welcome', Welcome),
-                               ('/blog/flush', Flush),
+       ('/wiki/signup', WikiSignup),
+       ('/wiki/login', WikiLogin),
+       ('/wiki/logout', WikiLogout),
+       ('/wiki/_edit' + PAGE_RE, WikiEditPage),
+       ('/wiki/_history' + PAGE_RE, WikiHistoryPage),
+       ('/wiki' + PAGE_RE + '(?:.json)?', WikiPage),
 
-                               ('/wiki/signup', WikiSignup),
-                               ('/wiki/login', WikiLogin),
-                               ('/wiki/logout', WikiLogout),
-                               ('/wiki/_edit' + PAGE_RE, WikiEditPage),
-                               ('/wiki/_history' + PAGE_RE, WikiHistoryPage),
-                               ('/wiki' + PAGE_RE + '(?:.json)?', WikiPage),
-
-                               ],
-                              debug = DEBUG)
+       ],
+  debug = DEBUG)
