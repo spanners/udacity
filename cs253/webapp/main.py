@@ -39,7 +39,7 @@ app = WSGIApplication([
 
         routes.PathPrefixRoute('/blog', [
 
-            Route(r'/<:(?:.json)?>',
+            Route(r'/<garbage:(?:.json)?>',
                 handler='handlers.blog.BlogFront.BlogFront',
                 name='front',
                 handler_method='get'),

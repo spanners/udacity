@@ -15,6 +15,7 @@ class AppHandler(webapp2.RequestHandler):
         """Initialize the handler."""
         super(AppHandler, self).__init__(request, response)
         self.jinja = jinja_environment
+        self.jinja.globals['uri_for'] = self.uri_for
 
     def write(self, *a, **kw):
         """Write an arbitrary string to the response stream."""
