@@ -3,7 +3,7 @@
 
 webapp - A Google App Engine web application using webapp2, containing:
 * Rot13 -- a form that allows you to ROT13 encode/decode text
-* Blog -- a blog with permalinks, using memcached 
+* Blog -- a blog with permalinks, using memcached and named routes & `uri\_for`
 * AsciiChan -- a 'chan' style text board with geoip resolution rendered on a static google map image
 * Wiki -- a wiki with history, using markdown and memcached
 
