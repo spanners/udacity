@@ -7,11 +7,21 @@ from lib.db.User import User
 class UserHandler(AppHandler):
     """ User handler, encapsulating user functions. """
 
+    def __init__(self, request=None, response=None):
+        super(UserHandler, self).__init__(request, response)
+        uid = self.read_secure_cookie('user_id')
+        self.user = uid and User.by_id(int(uid))
+        self.jinja.globals['grey_style'] = grey_style
+
+        if self.request.url.endswith('.json'):
+            self.format = 'json'
+        else:
+            self.format = 'html'
+
     def render_str(self, template_name, **params):
-        """ Override with params for templates to access. """
+        """ Override with params for template to access. """
         template = self.jinja.get_template(template_name)
         params['user'] = self.user
-        params['grey_style'] = grey_style
         return template.render(**params)
 
     def set_secure_cookie(self, name, val):
@@ -29,16 +39,6 @@ class UserHandler(AppHandler):
 
     def logout(self):
         self.response.headers.add_header('Set-Cookie', 'user_id=; Path=/')
-
-    def initialize(self, *a, **kw):
-        webapp2.RequestHandler.initialize(self, *a, **kw)
-        uid = self.read_secure_cookie('user_id')
-        self.user = uid and User.by_id(int(uid))
-
-        if self.request.url.endswith('.json'):
-            self.format = 'json'
-        else:
-            self.format = 'html'
 
     def notfound(self):
         self.error(404)

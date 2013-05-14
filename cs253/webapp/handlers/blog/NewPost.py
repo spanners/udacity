@@ -6,7 +6,7 @@ class NewPost(UserHandler):
         if self.user:
             self.render("newpost.html")
         else:
-            self.redirect("/blog/login")
+            self.redirect_to('login')
 
     def post(self):
         if not self.user:
