@@ -34,12 +34,12 @@ app = WSGIApplication([
 
         routes.PathPrefixRoute('/blog', [
 
-            Route(r'/<garbage:(?:.json)?>',
+            Route(r'/',
                 handler='handlers.blog.BlogFront.BlogFront',
                 name='front',
-                handler_method='get'),
+                ),
 
-            Route(r'/<post_id:[0-9]+><garbage:(?:.json)?>',
+            Route(r'/<post_id:[0-9]+>',
                 handler='handlers.blog.PostPage.PostPage',
                 name='page',
                 handler_method='get'),

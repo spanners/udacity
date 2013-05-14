@@ -2,7 +2,7 @@ from handlers.user import UserHandler
 from lib.db.Post import get_posts, age_str
 
 class BlogFront(UserHandler):
-    def get(self, garbage):
+    def get(self):
         posts, age = get_posts()
         if self.format == 'html':
             self.render('blogfront.html', posts = posts, age = age_str(age))
