@@ -3,8 +3,6 @@ import os
 from webapp2 import WSGIApplication, Route
 from webapp2_extras import routes
 
-from MainPage import MainPage
-
 from Rot13 import Rot13
 
 from Ascii import Ascii
@@ -28,7 +26,7 @@ PAGE_RE = r'(/(?:[a-zA-Z0-9_-]+/?)*)'
 
 app = WSGIApplication([
 
-        ('/', MainPage),
+        Route(r'/', handler='handlers.HomePage.HomePage', name='home'),
 
         ('/rot13/?', Rot13),
 
