@@ -58,9 +58,6 @@ class Post(db.Model):
     created = db.DateTimeProperty(auto_now_add = True)
     last_modified = db.DateTimeProperty(auto_now = True)
 
-    def render(self):
-        return jinja_str("post.html", p = self)
-
     def as_dict(self):
         time_fmt = '%c'
         d = {'subject': self.subject,

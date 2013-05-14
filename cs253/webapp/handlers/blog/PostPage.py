@@ -19,6 +19,6 @@ class PostPage(UserHandler):
             return
 
         if self.format == 'html':
-            self.render("permalink.html", post = post, age = age_str(age))
+            self.render("permalink.html", p = post, age = age_str(age))
         elif self.format == 'json':
             self.render_json(post.as_dict())

@@ -4,9 +4,12 @@ import json
 
 from main import template_dir
 
+from jinja2_markdown.extensions import MarkdownExtension
+
 # Initialize the jinja2 environment
 jinja_environment = jinja2.Environment(autoescape=True,
-        loader=jinja2.FileSystemLoader(template_dir))
+        loader=jinja2.FileSystemLoader(template_dir),
+        extensions = [MarkdownExtension])
 
 class AppHandler(webapp2.RequestHandler):
     """Base handler, encapsulating jinja2 functions."""
