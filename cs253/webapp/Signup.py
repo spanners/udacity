@@ -1,9 +1,9 @@
-from handlers.user import UserHandler
+from BaseHandler import BaseHandler
 
 from lib.utils import valid_username, valid_password, valid_email
 from lib.db.User import User
 
-class Signup(UserHandler):
+class Signup(BaseHandler):
     def get(self):
         self.next_url = self.request.headers.get('referer', '/')
         self.render("signup-form.html", next_url = self.next_url)

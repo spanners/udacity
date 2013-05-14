@@ -1,7 +1,7 @@
-from handlers.user import UserHandler
+from BaseHandler import BaseHandler
 from lib.db.User import User
 
-class Login(UserHandler):
+class Login(BaseHandler):
     def get(self):
         self.next_url = self.request.headers.get('referer', '/')
         self.render('login-form.html', next_url = self.next_url)

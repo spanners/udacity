@@ -1,6 +1,6 @@
-from handlers.user import UserHandler
+from BaseHandler import BaseHandler
 
-class Logout(UserHandler):
+class Logout(BaseHandler):
     def get(self):
     	self.next_url = self.request.headers.get('referer', '/')
 

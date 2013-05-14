@@ -50,4 +50,3 @@ class BaseHandler(webapp2.RequestHandler):
     def notfound(self):
         self.error(404)
         self.write("<h1>404: Not Found</h1>Sorry, my friend, but that page does not exist.")
-        

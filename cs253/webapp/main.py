@@ -9,12 +9,12 @@ from Ascii import Ascii
 
 from Flush import Flush
 
-#from Signup import WikiSignup
-#from Login import WikiLogin
-#from Logout import WikiLogout
-#from WikiPage import WikiPage
-#from WikiEditPage import WikiEditPage
-#from WikiHistoryPage import WikiHistoryPage
+from Signup import WikiSignup
+from Login import WikiLogin
+from Logout import WikiLogout
+from WikiPage import WikiPage
+from WikiEditPage import WikiEditPage
+from WikiHistoryPage import WikiHistoryPage
 
 # Set useful fields
 root_dir = os.path.dirname(__file__)
@@ -68,12 +68,12 @@ app = WSGIApplication([
 
        ('/blog/flush', Flush),
 
-      # ('/wiki/signup', WikiSignup),
-      # ('/wiki/login', WikiLogin),
-      # ('/wiki/logout', WikiLogout),
-      # ('/wiki/_edit' + PAGE_RE, WikiEditPage),
-      # ('/wiki/_history' + PAGE_RE, WikiHistoryPage),
-      # ('/wiki' + PAGE_RE + '(?:.json)?', WikiPage),
+       ('/wiki/signup', WikiSignup),
+       ('/wiki/login', WikiLogin),
+       ('/wiki/logout', WikiLogout),
+       ('/wiki/_edit' + PAGE_RE, WikiEditPage),
+       ('/wiki/_history' + PAGE_RE, WikiHistoryPage),
+       ('/wiki' + PAGE_RE + '(?:.json)?', WikiPage),
 
        ],
   debug = DEBUG)
