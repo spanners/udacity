@@ -10,7 +10,7 @@ class NewPost(UserHandler):
 
     def post(self):
         if not self.user:
-            self.redirect_to('front')
+            self.redirect_to('front', garbage = '')
 
         subject = self.request.get('subject')
         content = self.request.get('content')
@@ -18,7 +18,7 @@ class NewPost(UserHandler):
         if subject and content:
             p = Post(parent = blog_key, subject = subject, content = content)
             post_id = add_post(p)
-            self.redirect_to('page', post_id = post_id, garbage = "")
+            self.redirect_to('page', post_id = post_id, garbage = '')
         else:
             error = "subject and content, please!"
             self.render("newpost.html", subject=subject, content=content, error=error)
